@@ -32,7 +32,7 @@ namespace ScrollingText
                 Rows = 32,
                 Cols = 64,
                 ChainLength = 2,
-                Brightness = 75,
+                Brightness = 65,
                 // ReSharper disable once StringLiteralTypo
                 HardwareMapping = "adafruit-hat"
             });
@@ -71,8 +71,10 @@ namespace ScrollingText
                 {
                     foreach (var q in quotes)
                     {
+                        quotesLength += _canvas.DrawText(font, pos + quotesLength, 13, new Color(0, 0, 255),
+                            $" {q.Symbol} ");
                         quotesLength += _canvas.DrawText(font, pos + quotesLength, 13, new Color(255, 255, 0),
-                            $" {q.Symbol} {q.Price:0.00}");
+                            $"{q.Price:0.00} ");
                         quotesLength += _canvas.DrawText(font, pos + quotesLength, 13,
                             q.Change > 0 ? new Color(0, 255, 0) : new Color(255, 0, 0),
                             $"({(q.Change > 0 ? "+" : "")}{q.Change:0.00})");
@@ -83,7 +85,7 @@ namespace ScrollingText
                     //headlinesLength += _canvas.DrawText(font, pos - 10, 29, new Color(255, 255, 0), headlines.First().ToUpper());
                     foreach (var h in headlines)
                     {
-                        headlinesLength += _canvas.DrawText(font, pos + headlinesLength, 29, new Color(255, 255, 0), h.ToUpper());
+                        headlinesLength += _canvas.DrawText(font, pos + headlinesLength, 29, new Color(255, 255, 0), $"{h.ToUpper()}  ");
                     }
                 });
                 Task.WaitAll(quoteTask, headlineTask);
