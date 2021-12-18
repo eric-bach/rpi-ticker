@@ -27,7 +27,6 @@ function main() {
 
 async function getQuote(symbol) {
   // Finnhub has 60 calls/min limit
-  console.log(process.env.FINNHUB_API_KEY);
   var url = `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${process.env.FINNHUB_API_KEY}`;
 
   var data = await get(url);
