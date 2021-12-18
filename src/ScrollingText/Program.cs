@@ -82,11 +82,11 @@ namespace ScrollingText
                 {
                     foreach (var h in headlines)
                     {
+                        Console.WriteLine(h);
                         headlinesLength += _canvas.DrawText(font, pos - 10, 29, new Color(255, 255, 0), h.ToUpper());
                     }
                 });
                 Task.WaitAll(quoteTask, headlineTask);
-                Console.WriteLine("All tasks completed");
 
                 pos--;
                 if (pos + Math.Max(quotesLength, headlinesLength) < 0)
