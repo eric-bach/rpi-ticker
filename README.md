@@ -33,13 +33,19 @@ The `ApiJs` app retrieves stock quotes and news headlines via a cron job
    FINNHUB_API_KEY={{REPLACE_ME}}
    ```
 
-2. Edit the `src/ApiJs/index.js` on line 8 file with the stock symbols to retrieve.
+2. Install NodeJS
+
+   ```
+   sudo apt install nodejs
+   ```
+
+3. Edit the `src/ApiJs/index.js` on line 8 file with the stock symbols to retrieve.
 
    ```
    var symbols = ['AMZN', 'BMO', 'DDOG', 'LYFT', 'MSFT', 'NIO', 'SNOW', 'TSLA'];
    ```
 
-3. Create a cron job to run every 5 minutes
+4. Create a cron job to run every 5 minutes
 
    ```
    * /5 * * * * node /home/pi/Projects/rpi-ticker/src/ApiJs/index.js >> /home/pi/cron.log 2>&1
