@@ -397,6 +397,7 @@ FodyWeavers.xsd
 *.dll
 *.exe
 *.o
+*.so
 data/quotes.txt
 
 .env
