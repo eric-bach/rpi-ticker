@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -16,17 +15,17 @@ namespace ScrollingText
         public decimal Change { get; set; }
     }
 
-
     public class Program
     {
         private static RGBLedCanvas _canvas;
 
         public static void Main(string[] args)
         {
+            //AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
+            Console.CancelKeyPress += new ConsoleCancelEventHandler(OnProcessExit);
+
             Console.WriteLine("Started");
-
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
-
+            
             var matrix = new RGBLedMatrix(new RGBLedMatrixOptions
             {
                 Rows = 32,
@@ -100,7 +99,6 @@ namespace ScrollingText
                 _canvas = matrix.SwapOnVsync(_canvas);
             }
         }
-
 
         private static IEnumerable<QuoteData> GetQuotes()
         {
