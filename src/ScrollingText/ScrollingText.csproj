@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <Reference Include="RGBLedMatrix">
-      <HintPath>C:\Projects\rgb-pi-matrix\bindings\c#\RGBLedMatrix.dll</HintPath>
+      <HintPath>C:\Projects\rpi-ticker\bindings\RGBLedMatrix.dll</HintPath>
     </Reference>
   </ItemGroup>
 

@@ -4,17 +4,18 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 function main() {
+  const filepath = '../../data/quotes.txt';
   var symbols = ['AMZN', 'BMO', 'DDOG', 'LYFT', 'MSFT', 'NIO', 'SNOW', 'TSLA'];
 
   // Clear file
-  fs.writeFileSync('test.txt', ``);
+  fs.writeFileSync(filepath, ``);
 
   symbols.map((s) => {
     getQuote(s).then((r) => {
       console.log('Done: ', r);
 
       try {
-        fs.writeFileSync('test.txt', `${s},${r.price},${r.change}\n`, {
+        fs.writeFileSync(filepath, `${s},${r.price},${r.change}\n`, {
           flag: 'a+',
         });
       } catch (err) {
