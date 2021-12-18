@@ -81,7 +81,7 @@ namespace ScrollingText
 
         private static IEnumerable<QuoteData> GetQuotes()
         {
-            var path = "../data/quotes.txt";
+            var path = "../../data/quotes.txt";
             var lines = File.ReadAllLines(path);
 
             var obj = new List<QuoteData>();
