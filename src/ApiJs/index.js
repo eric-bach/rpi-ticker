@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 function main() {
-  const filepath = '../../data/quotes.txt';
+  const filepath = '/home/pi/Projects/rpi-ticker/data/quotes.txt';
   var symbols = ['AMZN', 'BMO', 'DDOG', 'LYFT', 'MSFT', 'NIO', 'SNOW', 'TSLA'];
 
   // Clear file
