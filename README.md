@@ -25,12 +25,12 @@ This project contains the source code for deploying a news headline and stock ti
 
 ## Configure the cron job
 
-The `ApiJs` app retrieves stock quotes and news headlines via a cron job
+The `ApiJs` app retrieves stock quotes (Yahoo Finance) and news headlines (NewsData.IO) via a cron job
 
-1. Setup a Finnhub API Key and create a `src/ApiJs/.env` file from the `src/ApiJs/.env.example` file
+1. Setup a NewsData.IO API Key and create a `src/ApiJs/.env` file from the `src/ApiJs/.env.example` file
 
    ```
-   FINNHUB_API_KEY={{REPLACE_ME}}
+   NEWSDATA_API_KEY={{REPLACE_ME}}
    ```
 
 2. Install NodeJS
@@ -48,7 +48,7 @@ The `ApiJs` app retrieves stock quotes and news headlines via a cron job
 4. Create a cron job to run every 5 minutes
 
    ```
-   * /5 * * * * node /home/pi/Projects/rpi-ticker/src/ApiJs/index.js >> /home/pi/cron.log 2>&1
+   * /5 * * * * node /home/pi/Projects/rpi-ticker/src/ApiJs/index.js /home/pi/Projects/rpi-ticker/data >> /home/pi/cron.log 2>&1
    ```
 
 ## Run the text scroller project

@@ -398,7 +398,7 @@ FodyWeavers.xsd
 *.exe
 *.o
 *.so
-data/quotes.txt
+data/
 
 .env
 package-lock.json
