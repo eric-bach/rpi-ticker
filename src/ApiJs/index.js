@@ -12,14 +12,18 @@ function main() {
 
   // TODO Parameterize this
   var symbols = [
+    'AC.TO',
     'AMZN',
     'BMO.TO',
     'DDOG',
     'LYFT',
     'MSFT',
     'NIO',
+    'PTON',
     'SNOW',
     'TSLA',
+    'VGRO.TO',
+    'VXC.TO',
   ];
 
   // Clear file
