@@ -125,7 +125,7 @@ namespace ScrollingText
         private static IEnumerable<string> GetHeadlines()
         {
             const string path = "../data/headlines.txt";
-            return File.ReadAllLines(path).ToList().Take(3);
+            return File.ReadAllLines(path).ToList().Take(4);
         }
 
         private static void OnProcessExit(object sender, EventArgs e)
