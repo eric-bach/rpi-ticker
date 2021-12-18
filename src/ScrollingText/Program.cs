@@ -21,7 +21,7 @@ namespace ScrollingText
 
         public static void Main(string[] args)
         {
-            //AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
             Console.CancelKeyPress += new ConsoleCancelEventHandler(OnProcessExit);
 
             Console.WriteLine("Started");
