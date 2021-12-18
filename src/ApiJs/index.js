@@ -2,7 +2,7 @@ const https = require('https');
 const fs = require('fs');
 const yahooFinance = require('yahoo-finance2').default; // NOTE the .default
 const dotenv = require('dotenv');
-dotenv.config();
+dotenv.config({ path: '/home/pi/Projects/rpi-ticker/src/ApiJs/.env' });
 
 function main() {
   var outputFolder =
