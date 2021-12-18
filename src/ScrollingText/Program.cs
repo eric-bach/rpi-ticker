@@ -130,6 +130,7 @@ namespace ScrollingText
 
         private static void OnProcessExit(object sender, EventArgs e)
         {
+            Console.WriteLine("Shut down");
             _canvas.Clear();
         }
     }
