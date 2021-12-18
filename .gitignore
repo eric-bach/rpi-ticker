@@ -396,7 +396,6 @@ FodyWeavers.xsd
 # Compiled files
 *.dll
 *.exe
-data/
 
 .env
 package-lock.json

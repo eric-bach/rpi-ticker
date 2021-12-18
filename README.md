@@ -2,7 +2,7 @@
 
 This project contains the source code for deploying a news headline and stock ticker powered by RGB LED matrix panels and the [Raspberry Pi control library](https://github.com/hzeller/rpi-rgb-led-matrix) from [hzeller](https://github.com/hzeller). The specific RGB LED matrix panels and bonnet/HAT I used for this project were sourced from [Adafruit](https://www.adafruit.com) but others may work as well.
 
-## Build and run the project
+## Build the project
 
 1. In the root directory build all the necessary libraries based on [hzeller/rpi=rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix)
 
@@ -23,7 +23,31 @@ This project contains the source code for deploying a news headline and stock ti
    make build-csharp
    ```
 
-4. To run the example applications in the `src` folder
+## Configure the cron job
+
+The `ApiJs` app retrieves stock quotes and news headlines via a cron job
+
+1. Setup a Finnhub API Key and create a `src/ApiJs/.env` file from the `src/ApiJs/.env.example` file
+
+   ```
+   FINNHUB_API_KEY={{REPLACE_ME}}
+   ```
+
+2. Edit the `src/ApiJs/index.js` on line 8 file with the stock symbols to retrieve.
+
+   ```
+   var symbols = ['AMZN', 'BMO', 'DDOG', 'LYFT', 'MSFT', 'NIO', 'SNOW', 'TSLA'];
+   ```
+
+3. Create a cron job to run every 5 minutes
+
+   ```
+   * /5 * * * * node /home/pi/Projects/rpi-ticker/src/ApiJs/index.js >> /home/pi/cron.log 2>&1
+   ```
+
+## Run the text scroller project
+
+1. Run the rpi-ticker application in the `src` folder using mono
 
    ```shell
    sudo mono rpi-ticker.exe
