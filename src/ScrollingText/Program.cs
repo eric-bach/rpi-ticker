@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using rpi_rgb_led_matrix_sharp;
 
 namespace ScrollingText
@@ -51,24 +53,43 @@ namespace ScrollingText
                 _canvas.Clear();
 
                 // TODO Get stock prices and news from file in a thread
-                var quotes = GetQuotes();
-
-                var s_len = 0;
-                var n_len = 0;
-                foreach (var q in quotes)
+                IEnumerable<QuoteData> quotes = new List<QuoteData>();
+                IEnumerable<string> headlines = new List<string>();
+                var getQuotesTask = Task.Run(() =>
                 {
-                    s_len += _canvas.DrawText(font, pos + s_len, 13, new Color(255, 255, 0), $" {q.Symbol} {q.Price}");
-                    s_len += _canvas.DrawText(font, pos + s_len, 13,
-                        q.Change > 0 ? new Color(0, 255, 0) : new Color(255, 0, 0),
-                        $"({(q.Change > 0 ? "+" : "")}{q.Change.ToString(CultureInfo.InvariantCulture)})");
-                }
+                    quotes = GetQuotes();
+                });
+                var getHeadlinesTask = Task.Run(() =>
+                {
+                    headlines = GetHeadlines();
+                });
+                Task.WaitAll(getQuotesTask, getHeadlinesTask);
 
-                n_len += _canvas.DrawText(font, pos - 10, 29, new Color(255, 255, 0),
-                    "Diplomatic boycott of Beijing Olympics a 'symbolic' move that critics say doesn't go far enough"
-                        .ToUpper());
+                var quotesLength = 0;
+                var headlinesLength = 0;
+                var quoteTask = Task.Run(() =>
+                {
+                    foreach (var q in quotes)
+                    {
+                        quotesLength += _canvas.DrawText(font, pos + quotesLength, 13, new Color(255, 255, 0),
+                            $" {q.Symbol} {q.Price}");
+                        quotesLength += _canvas.DrawText(font, pos + quotesLength, 13,
+                            q.Change > 0 ? new Color(0, 255, 0) : new Color(255, 0, 0),
+                            $"({(q.Change > 0 ? "+" : "")}{q.Change.ToString(CultureInfo.InvariantCulture)})");
+                    }
+                });
+                var headlineTask = Task.Run(() =>
+                {
+                    foreach (var h in headlines)
+                    {
+                        headlinesLength += _canvas.DrawText(font, pos - 10, 29, new Color(255, 255, 0), h.ToUpper());
+                    }
+                });
+                Task.WaitAll(quoteTask, headlineTask);
+                Console.WriteLine("All tasks completed");
 
                 pos--;
-                if (pos + Math.Max(s_len, n_len) < 0)
+                if (pos + Math.Max(quotesLength, headlinesLength) < 0)
                 {
                     pos = _canvas.Width;
                 }
@@ -81,7 +102,7 @@ namespace ScrollingText
 
         private static IEnumerable<QuoteData> GetQuotes()
         {
-            var path = "../data/quotes.txt";
+            const string path = "../data/quotes.txt";
             var lines = File.ReadAllLines(path);
 
             var obj = new List<QuoteData>();
@@ -97,6 +118,12 @@ namespace ScrollingText
             }
 
             return obj;
+        }
+
+        private static IEnumerable<string> GetHeadlines()
+        {
+            const string path = "../data/headlines.txt";
+            return File.ReadAllLines(path).ToList();
         }
 
         private static void OnProcessExit(object sender, EventArgs e)
