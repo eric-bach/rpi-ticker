@@ -80,12 +80,12 @@ namespace ScrollingText
                 });
                 var headlineTask = Task.Run(() =>
                 {
-                    headlinesLength += _canvas.DrawText(font, pos - 10, 29, new Color(255, 255, 0), headlines.First().ToUpper());
-                    // foreach (var h in headlines)
-                    // {
-                    //     Console.WriteLine(h);
-                    //     headlinesLength += _canvas.DrawText(font, pos - 10, 29, new Color(255, 255, 0), h.ToUpper());
-                    // }
+                    //headlinesLength += _canvas.DrawText(font, pos - 10, 29, new Color(255, 255, 0), headlines.First().ToUpper());
+                    foreach (var h in headlines)
+                    {
+                        Console.WriteLine(h);
+                        headlinesLength += _canvas.DrawText(font, pos - 10, 29, new Color(255, 255, 0), h.ToUpper());
+                    }
                 });
                 Task.WaitAll(quoteTask, headlineTask);
 
@@ -124,7 +124,7 @@ namespace ScrollingText
         private static IEnumerable<string> GetHeadlines()
         {
             const string path = "../data/headlines.txt";
-            return File.ReadAllLines(path).ToList();
+            return File.ReadAllLines(path).ToList().Take(3);
         }
 
         private static void OnProcessExit(object sender, EventArgs e)
