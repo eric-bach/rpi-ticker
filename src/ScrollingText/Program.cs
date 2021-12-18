@@ -72,10 +72,10 @@ namespace ScrollingText
                     foreach (var q in quotes)
                     {
                         quotesLength += _canvas.DrawText(font, pos + quotesLength, 13, new Color(255, 255, 0),
-                            $" {q.Symbol} {q.Price}");
+                            $" {q.Symbol} {q.Price:0.00}");
                         quotesLength += _canvas.DrawText(font, pos + quotesLength, 13,
                             q.Change > 0 ? new Color(0, 255, 0) : new Color(255, 0, 0),
-                            $"({(q.Change > 0 ? "+" : "")}{q.Change.ToString(CultureInfo.InvariantCulture)})");
+                            $"({(q.Change > 0 ? "+" : "")}{q.Change:0.00})");
                     }
                 });
                 var headlineTask = Task.Run(() =>
@@ -83,8 +83,7 @@ namespace ScrollingText
                     //headlinesLength += _canvas.DrawText(font, pos - 10, 29, new Color(255, 255, 0), headlines.First().ToUpper());
                     foreach (var h in headlines)
                     {
-                        Console.WriteLine(h);
-                        headlinesLength += _canvas.DrawText(font, pos - 10, 29, new Color(255, 255, 0), h.ToUpper());
+                        headlinesLength += _canvas.DrawText(font, pos + headlinesLength, 29, new Color(255, 255, 0), h.ToUpper());
                     }
                 });
                 Task.WaitAll(quoteTask, headlineTask);
@@ -124,7 +123,7 @@ namespace ScrollingText
         private static IEnumerable<string> GetHeadlines()
         {
             const string path = "../data/headlines.txt";
-            return File.ReadAllLines(path).ToList().Take(3);
+            return File.ReadAllLines(path).ToList().Take(2);
         }
 
         private static void OnProcessExit(object sender, EventArgs e)
