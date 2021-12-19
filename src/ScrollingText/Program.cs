@@ -52,6 +52,10 @@ namespace ScrollingText
             Console.WriteLine("Scrolling text");
 
             var client = new System.Net.Http.HttpClient();
+            var response = client.GetAsync("https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?region=US&lang=en-US").Result;
+            response.EnsureSuccessStatusCode();
+            var responseBody = response.Content.ReadAsStringAsync().Result;
+            Console.WriteLine(responseBody);
 
             while (true)
             {
