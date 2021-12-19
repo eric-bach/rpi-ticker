@@ -119,7 +119,7 @@ namespace ScrollingText
 
                 _quotes[result.quoteSummary.result.First().price.symbol] = new QuoteSummary
                 {
-                    Price = result.quoteSummary.result.First().price.regularMarketPrice.raw + i * 10,
+                    Price = result.quoteSummary.result.First().price.regularMarketPrice.raw + i,
                     Change = result.quoteSummary.result.First().price.regularMarketChange.raw + i
                 };
                 
