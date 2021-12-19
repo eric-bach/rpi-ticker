@@ -2,17 +2,17 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <ApplicationIcon />
-    <StartupObject />
+    <StartupObject>ScrollingText.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
     <Reference Include="RGBLedMatrix">
       <HintPath>C:\Projects\rpi-ticker\bindings\RGBLedMatrix.dll</HintPath>
     </Reference>
-        <Reference Include="System.Net.Http">
-      <HintPath>C:\Projects\rpi-ticker\bindings\System.Net.Http.dll</HintPath>
+    <Reference Include="System.Net.Http">
+      <HintPath>..\..\bindings\System.Net.Http.dll</HintPath>
     </Reference>
   </ItemGroup>
 
