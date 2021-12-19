@@ -21,6 +21,7 @@ namespace ScrollingText
     {
         private static RGBLedCanvas _canvas;
         public static ConcurrentDictionary<string, QuoteSummary> _quotes { get; set; } = new ConcurrentDictionary<string, QuoteSummary>();
+        public static ConcurrentQueue<string> _headlines { get; set; } = new ConcurrentQueue<string>();
 
         public static void Main()
         {
@@ -44,13 +45,14 @@ namespace ScrollingText
             Console.WriteLine("Starting rpi-ticker");
 
             Parallel.Invoke(
-                () => { GetData(); },
+                () => { GetQuotes(); },
+                () => { GetHeadlines(); },
                 () => { RunTicker(matrix); }
             );
         }
 
 
-        private static async void GetData()
+        private static async void GetQuotes()
         {
             var symbols = new[]
             {
@@ -91,12 +93,38 @@ namespace ScrollingText
                     Price = result.quoteSummary.result.First().price.regularMarketPrice.raw,
                     Change = result.quoteSummary.result.First().price.regularMarketChange.raw
                 };
-                
+
                 if (i != 0 && i % symbols.Length == 0)
                 {
                     Console.WriteLine("Waiting for next batch of quotes");
-                    Thread.Sleep(5000);
+                    Thread.Sleep(60000);
                 }
+            }
+        }
+
+        private static async void GetHeadlines()
+        {
+            Console.WriteLine("Getting headlines");
+
+            var i = 0;
+            while (true)
+            {
+                var client = new HttpClient();
+                var response =
+                    await client.GetAsync(
+                        $"https://newsdata.io/api/1/news?apikey={process.env.NEWSDATA_API_KEY}&language=en&country=ca&q=headlines");
+                response.EnsureSuccessStatusCode();
+                var responseBody = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<Headlines>(responseBody);
+
+                foreach (var title in result.results.Select(r => r.title))
+                {
+                    Console.WriteLine(title);
+                    _headlines.Enqueue(title);
+                }
+
+                Console.WriteLine("Waiting for next news update");
+                Thread.Sleep(60000);
             }
         }
 
@@ -110,11 +138,6 @@ namespace ScrollingText
             while (true)
             {
                 _canvas.Clear();
-
-                //// Read quotes and headlines from file
-                //IEnumerable<string> headlines = new List<string>();
-                //var getHeadlinesTask = Task.Run(() => { headlines = GetHeadlines(); });
-                //Task.WaitAll(getHeadlinesTask);
 
                 // Print quotes and headlines to canvas
                 var quotesLength = 0;
@@ -132,16 +155,15 @@ namespace ScrollingText
                             $"({(q.Value.Change > 0 ? "+" : "")}{q.Value.Change:0.00})");
                     }
                 });
-                Task.WaitAll(quoteTask);
-                //var headlineTask = Task.Run(() =>
-                //{
-                //    foreach (var h in headlines)
-                //    {
-                //        headlinesLength += _canvas.DrawText(font, pos + headlinesLength, 29, new Color(255, 255, 0), $"{h.ToUpper()}");
-                //        headlinesLength += _canvas.DrawText(font, pos + headlinesLength, 29, new Color(255, 0, 0), " *** ");
-                //    }
-                //});
-                //Task.WaitAll(quoteTask, headlineTask);
+                var headlineTask = Task.Run(() =>
+                {
+                    foreach (var h in _headlines)
+                    {
+                        headlinesLength += _canvas.DrawText(font, pos + headlinesLength, 29, new Color(255, 255, 0), $"{h.ToUpper()}");
+                        headlinesLength += _canvas.DrawText(font, pos + headlinesLength, 29, new Color(255, 0, 0), " *** ");
+                    }
+                });
+                Task.WaitAll(quoteTask, headlineTask);
 
                 // Scroll text
                 pos--;
@@ -154,12 +176,6 @@ namespace ScrollingText
                 Thread.Sleep(30);
                 _canvas = matrix.SwapOnVsync(_canvas);
             }
-        }
-
-        private static IEnumerable<string> GetHeadlines()
-        {
-            const string path = "../data/headlines.txt";
-            return File.ReadAllLines(path).ToList().Take(4);
         }
 
         private static void OnProcessExit(object sender, EventArgs e)

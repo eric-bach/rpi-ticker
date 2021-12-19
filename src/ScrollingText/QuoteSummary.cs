@@ -34,4 +34,14 @@ namespace ScrollingText
             }
         }
     }
+
+    public class Headlines
+    {
+        public ICollection<NewsResult> results { get; set; } = new List<NewsResult>();
+
+        public class NewsResult
+        {
+            public string title { get; set; }
+        }
+    }
 }
