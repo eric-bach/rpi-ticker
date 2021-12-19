@@ -23,6 +23,66 @@ namespace ScrollingText
         {
             // Clean up matrix on process exit
             Console.CancelKeyPress += OnProcessExit;
+            
+            /*
+            while (true)
+            {
+                // Read quotes and headlines from file
+                IEnumerable<QuoteData> quotes = new List<QuoteData>();
+                IEnumerable<string> headlines = new List<string>();
+                var getQuotesTask = Task.Run(() => { quotes = GetQuotes(); });
+                var getHeadlinesTask = Task.Run(() => { headlines = GetHeadlines(); });
+                Task.WaitAll(getQuotesTask, getHeadlinesTask);
+
+                var tempQuotes = string.Empty;
+                var tempHeadlines = string.Empty;
+
+                // Print quotes and headlines to canvas
+                var quotesLength = 0;
+                var headlinesLength = 0;
+                var quoteTask = Task.Run(() =>
+                {
+                    foreach (var q in quotes)
+                    {
+                        var a = $" {q.Symbol} ";
+                        var b = $"{q.Price:0.00} ";
+                        var c = $"({(q.Change > 0 ? "+" : "")}{q.Change:0.00})";
+
+                        tempQuotes += $"{a}{b}{c}";
+                        quotesLength += a.Length + b.Length + c.Length;
+                    }
+                });
+                var headlineTask = Task.Run(() =>
+                {
+                    foreach (var h in headlines)
+                    {
+                        var d = "{h.ToUpper()}  ";
+
+                        tempHeadlines += $"{d}";
+                        headlinesLength += d.Length;
+                    }
+                });
+                Task.WaitAll(quoteTask, headlineTask);
+
+                if (Math.Abs(quotesLength - headlinesLength) <= 8) continue;
+                if (quotesLength > headlinesLength)
+                {
+                    var mag = Math.Round((double)quotesLength / headlinesLength, MidpointRounding.AwayFromZero);
+                    for (var i = 1; i < mag; i++)
+                    {
+                        tempHeadlines.Concat(tempHeadlines);
+                    }
+                }
+                else
+                {
+                    var mag = Math.Round((double)headlinesLength / headlinesLength, MidpointRounding.AwayFromZero);
+                    for (var i = 1; i < mag; i++)
+                    {
+                        tempQuotes.Contains(tempQuotes);
+                    }
+                }
+            }
+            */
 
             Console.WriteLine("Initializing rpi-ticker");
 
@@ -47,7 +107,7 @@ namespace ScrollingText
         {
             var font = new RGBLedFont("../fonts/9x15B.bdf");
             var pos = _canvas.Width;
-            
+
             Console.WriteLine("Scrolling text");
 
             while (true)
@@ -64,6 +124,8 @@ namespace ScrollingText
                 // Print quotes and headlines to canvas
                 var quotesLength = 0;
                 var headlinesLength = 0;
+                var quoteString = "";
+                var headlineString = "";
                 var quoteTask = Task.Run(() =>
                 {
                     foreach (var q in quotes)
@@ -75,6 +137,8 @@ namespace ScrollingText
                         quotesLength += _canvas.DrawText(font, pos + quotesLength, 13,
                             q.Change > 0 ? new Color(0, 255, 0) : new Color(255, 0, 0),
                             $"({(q.Change > 0 ? "+" : "")}{q.Change:0.00})");
+
+                        quoteString = $" {q.Symbol} {q.Price:0.00} ({(q.Change > 0 ? "+" : "")}{q.Change:0.00})";
                     }
                 });
                 var headlineTask = Task.Run(() =>
@@ -82,9 +146,32 @@ namespace ScrollingText
                     foreach (var h in headlines)
                     {
                         headlinesLength += _canvas.DrawText(font, pos + headlinesLength, 29, new Color(255, 255, 0), $"{h.ToUpper()}  ");
+
+                        headlineString = $"{h.ToUpper()}";
                     }
                 });
                 Task.WaitAll(quoteTask, headlineTask);
+
+                // Normalize strings
+                if (Math.Abs(quotesLength - headlinesLength) <= 8) continue;
+                if (quotesLength > headlinesLength)
+                {
+                    var mag = Math.Round((double)quotesLength / headlinesLength, MidpointRounding.AwayFromZero);
+                    for (var i = 1; i < mag; i++)
+                    {
+                        headlineString.Concat(headlineString);
+                    }
+                }
+                else
+                {
+                    var mag = Math.Round((double)headlinesLength / headlinesLength, MidpointRounding.AwayFromZero);
+                    for (var i = 1; i < mag; i++)
+                    {
+                        quoteString.Concat(quoteString);
+                    }
+                }
+
+                Console.WriteLine($"Quote String: {quoteString.Length} HeadlineString: {headlineString.Length}");
 
                 // Scroll text
                 pos--;
@@ -100,7 +187,7 @@ namespace ScrollingText
 
         private static IEnumerable<QuoteData> GetQuotes()
         {
-            const string path = "../data/quotes.txt";
+            const string path = "../../../../../data/quotes.txt";
             var lines = File.ReadAllLines(path);
 
             var obj = new List<QuoteData>();
@@ -120,7 +207,7 @@ namespace ScrollingText
 
         private static IEnumerable<string> GetHeadlines()
         {
-            const string path = "../data/headlines.txt";
+            const string path = "../../../../../data/headlines.txt";
             return File.ReadAllLines(path).ToList().Take(4);
         }
 
