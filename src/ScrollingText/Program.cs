@@ -25,7 +25,7 @@ namespace ScrollingText
             // Clean up matrix on process exit
             Console.CancelKeyPress += OnProcessExit;
 
-            Debug.WriteLine("Initializing rpi-ticker");
+            Console.WriteLine("Initializing rpi-ticker");
 
             var matrix = new RGBLedMatrix(new RGBLedMatrixOptions
             {
@@ -39,7 +39,7 @@ namespace ScrollingText
 
             _canvas = matrix.CreateOffscreenCanvas();
 
-            Debug.WriteLine("Starting rpi-ticker");
+            Console.WriteLine("Starting rpi-ticker");
 
             RunTicker(matrix);
         }
