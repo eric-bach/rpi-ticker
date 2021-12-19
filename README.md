@@ -2,6 +2,12 @@
 
 This project contains the source code for deploying a news headline and stock ticker powered by RGB LED matrix panels and the [Raspberry Pi control library](https://github.com/hzeller/rpi-rgb-led-matrix) from [hzeller](https://github.com/hzeller). The specific RGB LED matrix panels and bonnet/HAT I used for this project were sourced from [Adafruit](https://www.adafruit.com) but others may work as well.
 
+A NodeJS application running in a cron job periodically fetches stock quotes and news headlines from [Yahoo Finance](https://finance.yahoo.com/) and [Newsdata.IO](https://newsdata.io/). The data is saved to a text file on the local storage which is read by the rpi-ticker program which is writen using the C# binding from [hzeller's Raspberry Pi control library](https://github.com/hzeller/rpi-rgb-led-matrix).
+
+## Getting started
+
+If you would like to get started with some simple examples before setting up the project, there are examples in the `examples` folder that you can find [here](examples/README.md) with instructions on how to run each of them. Otherwise the following steps outliens how to setup the `rpi-ticker`.
+
 ## Build the project
 
 1. In the root directory build all the necessary libraries based on [hzeller/rpi=rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix)
