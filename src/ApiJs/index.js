@@ -21,9 +21,12 @@ function main() {
     'NIO',
     'PTON',
     'SNOW',
+    'TD.TO',
     'TSLA',
     'VGRO.TO',
     'VXC.TO',
+    'ZAG.TO',
+    'ZRE.TO',
   ];
 
   // Clear file
