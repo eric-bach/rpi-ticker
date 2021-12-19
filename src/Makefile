@@ -1,6 +1,6 @@
 ﻿CSHARP_LIB=RGBLedMatrix.dll
 CSHARP_HTTP_LIB=System.Net.Http.dll
-CSHARP_JSON_LIB=System.Text.Json.dll
+CSHARP_JSON_LIB=Newtonsoft.Json.dll
 CSHARP_COMPILER=mcs
 CSHARP_LIBDIR=../bindings
 CSHARP_LIBRARY=$(CSHARP_LIBDIR)/$(CSHARP_LIB)

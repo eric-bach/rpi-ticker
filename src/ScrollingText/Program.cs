@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using rpi_rgb_led_matrix_sharp;
 
 namespace ScrollingText
@@ -77,7 +76,7 @@ namespace ScrollingText
             var response = client.GetAsync("https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?region=US&lang=en-US").Result;
             response.EnsureSuccessStatusCode();
             var responseBody = response.Content.ReadAsStringAsync().Result;
-            var result = JsonSerializer.Deserialize<Quote>(responseBody);
+            var result = JsonConvert.DeserializeObject<Quote>(responseBody);
             Console.WriteLine(responseBody);
 
             while (true)
