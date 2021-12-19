@@ -187,7 +187,7 @@ namespace ScrollingText
 
         private static IEnumerable<QuoteData> GetQuotes()
         {
-            const string path = "../../../../../data/quotes.txt";
+            const string path = "../data/quotes.txt";
             var lines = File.ReadAllLines(path);
 
             var obj = new List<QuoteData>();
@@ -207,7 +207,7 @@ namespace ScrollingText
 
         private static IEnumerable<string> GetHeadlines()
         {
-            const string path = "../../../../../data/headlines.txt";
+            const string path = "../data/headlines.txt";
             return File.ReadAllLines(path).ToList().Take(4);
         }
 
