@@ -11,6 +11,9 @@
     <Reference Include="RGBLedMatrix">
       <HintPath>C:\Projects\rpi-ticker\bindings\RGBLedMatrix.dll</HintPath>
     </Reference>
+        <Reference Include="System.Net.Http">
+      <HintPath>C:\Projects\rpi-ticker\bindings\System.Net.Http.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
