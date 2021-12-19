@@ -139,6 +139,7 @@ namespace ScrollingText
                             $"({(q.Change > 0 ? "+" : "")}{q.Change:0.00})");
 
                         quoteString = string.Join(quoteString, $" {q.Symbol} {q.Price:0.00} ({(q.Change > 0 ? "+" : "")}{q.Change:0.00})");
+                        Console.WriteLine(quoteString);
                     }
                 });
                 var headlineTask = Task.Run(() =>
@@ -148,6 +149,7 @@ namespace ScrollingText
                         headlinesLength += _canvas.DrawText(font, pos + headlinesLength, 29, new Color(255, 255, 0), $"{h.ToUpper()}  ");
 
                         headlineString = string.Join(headlineString, $"{h.ToUpper()}");
+                        Console.WriteLine(headlineString);
                     }
                 });
                 Task.WaitAll(quoteTask, headlineTask);
@@ -177,7 +179,7 @@ namespace ScrollingText
                     }
                 }
 
-                Console.WriteLine($"Quote String: {quoteString.Length} HeadlineString: {headlineString.Length}");
+                //Console.WriteLine($"Quote String: {quoteString.Length} HeadlineString: {headlineString.Length}");
 
                 // Scroll text
                 pos--;
