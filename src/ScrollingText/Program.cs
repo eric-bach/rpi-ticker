@@ -110,7 +110,7 @@ namespace ScrollingText
                 var client = new HttpClient();
                 var response =
                     await client.GetAsync(
-                        $"https://query1.finance.yahoo.com/v10/finance/quoteSummary/{symbols[i % symbols.Length]}?modules=price");
+                        $"https://query1.finance.yahoo.com/v10/finance/quoteSummary/{symbols[i++ % symbols.Length]}?modules=price");
                 response.EnsureSuccessStatusCode();
                 var responseBody = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<Quote>(responseBody);
