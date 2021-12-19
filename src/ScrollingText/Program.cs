@@ -42,55 +42,38 @@ namespace ScrollingText
 
             Console.WriteLine("Starting rpi-ticker");
 
-            RunTicker(matrix);
+            Task.Run(() => GetData());
+            Task.Run(() => RunTicker(matrix));
         }
 
-        public class Quote
+
+        private static async void GetData()
         {
-            public QuoteSummary quoteSummary{ get; set; }
+            Console.WriteLine("Getting quotes");
 
-            public class QuoteSummary
+            while (true)
             {
-                public ICollection<Result> result { get; set; }
+                var client = new HttpClient();
+                var response =
+                    await client.GetAsync(
+                        "https://query1.finance.yahoo.com/v10/finance/quoteSummary/DDOG?modules=price");
+                response.EnsureSuccessStatusCode();
+                var responseBody = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<Quote>(responseBody);
+                Console.WriteLine(result.quoteSummary.result.First().price.symbol);
+                Console.WriteLine(result.quoteSummary.result.First().price.regularMarketPrice.raw);
+                Console.WriteLine(result.quoteSummary.result.First().price.regularMarketChange.raw);
 
-                public class Result
-                {
-                    public Price price { get; set; }
-
-                    public class Price
-                    {
-                        public string symbol { get; set; }
-                        public RegularMarketPrice regularMarketPrice { get; set; }
-                        public RegularMarketChange regularMarketChange { get; set; }
-
-                        public class RegularMarketPrice
-                        {
-                            public decimal raw { get; set; }
-                        }
-
-                        public class RegularMarketChange 
-                        {
-                            public decimal raw { get; set; }
-                        }
-                }
-                }
+                Thread.Sleep(5000);
             }
         }
+
         private static void RunTicker(RGBLedMatrix matrix)
         {
             var font = new RGBLedFont("../fonts/9x15B.bdf");
             var pos = _canvas.Width;
 
             Console.WriteLine("Scrolling text");
-
-            var client = new HttpClient();
-            var response = client.GetAsync("https://query1.finance.yahoo.com/v10/finance/quoteSummary/DDOG?modules=price").Result;
-            response.EnsureSuccessStatusCode();
-            var responseBody = response.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<Quote>(responseBody);
-            Console.WriteLine(result.quoteSummary.result.First().price.symbol);
-            Console.WriteLine(result.quoteSummary.result.First().price.regularMarketPrice.raw);
-            Console.WriteLine(result.quoteSummary.result.First().price.regularMarketChange.raw);
 
             while (true)
             {
