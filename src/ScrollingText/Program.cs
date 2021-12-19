@@ -118,7 +118,10 @@ namespace ScrollingText
                 Console.Write(result.quoteSummary.result.First().price.regularMarketPrice.raw);
                 Console.WriteLine(result.quoteSummary.result.First().price.regularMarketChange.raw);
 
-                Thread.Sleep(5000);
+                if (i != 0 && i % symbols.Length == 0)
+                {
+                    Thread.Sleep(60000);
+                }
             }
         }
 
