@@ -144,6 +144,7 @@ namespace ScrollingText
                 // Read quotes and headlines from file
                 IEnumerable<string> headlines = new List<string>();
                 var getHeadlinesTask = Task.Run(() => { headlines = GetHeadlines(); });
+                Task.WaitAll(getHeadlinesTask);
 
                 // Print quotes and headlines to canvas
                 var quotesLength = 0;
