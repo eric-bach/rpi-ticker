@@ -165,8 +165,8 @@ namespace ScrollingText
                 {
                     foreach (var h in _headlines)
                     {
-                        headlinesLength += _canvas.DrawText(font, h_os + headlinesLength, 29, new Color(255, 255, 0), $"{h.ToUpper()}");
-                        headlinesLength += _canvas.DrawText(font, h_os + headlinesLength, 29, new Color(255, 0, 0), " *** ");
+                        headlinesLength += _canvas.DrawText(font, h_pos + headlinesLength, 29, new Color(255, 255, 0), $"{h.ToUpper()}");
+                        headlinesLength += _canvas.DrawText(font, h_pos + headlinesLength, 29, new Color(255, 0, 0), " *** ");
                     }
                 });
                 Task.WaitAll(quoteTask, headlineTask);
