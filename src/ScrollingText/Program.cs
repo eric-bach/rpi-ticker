@@ -133,7 +133,8 @@ namespace ScrollingText
                 }
 
                 Console.WriteLine("Waiting for next news update");
-                Thread.Sleep(1800000);
+                Thread.Sleep(30000);
+                //Thread.Sleep(1800000);
             }
         }
 
