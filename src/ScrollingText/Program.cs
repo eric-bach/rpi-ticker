@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -33,8 +32,6 @@ namespace ScrollingText
             var root = Directory.GetCurrentDirectory();
             var dotenv = Path.Combine(root, ".env");
             DotEnv.Load(dotenv);
-
-            Console.WriteLine(Environment.GetEnvironmentVariable("NEWSDATA_API_KEY"));
 
             Console.WriteLine("Initializing rpi-ticker");
 
@@ -105,7 +102,7 @@ namespace ScrollingText
                 if (i != 0 && i % symbols.Length == 0)
                 {
                     Console.WriteLine("Waiting for next batch of quotes");
-                    Thread.Sleep(60000);
+                    Thread.Sleep(30000);
                 }
             }
         }
