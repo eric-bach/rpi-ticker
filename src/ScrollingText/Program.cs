@@ -124,8 +124,6 @@ namespace ScrollingText
                 // Print quotes and headlines to canvas
                 var quotesLength = 0;
                 var headlinesLength = 0;
-                var quoteString = "";
-                var headlineString = "";
                 var quoteTask = Task.Run(() =>
                 {
                     foreach (var q in quotes)
@@ -137,9 +135,6 @@ namespace ScrollingText
                         quotesLength += _canvas.DrawText(font, pos + quotesLength, 13,
                             q.Change > 0 ? new Color(0, 255, 0) : new Color(255, 0, 0),
                             $"({(q.Change > 0 ? "+" : "")}{q.Change:0.00})");
-
-                        quoteString = string.Join(quoteString, $" {q.Symbol} {q.Price:0.00} ({(q.Change > 0 ? "+" : "")}{q.Change:0.00})");
-                        Console.WriteLine(quoteString);
                     }
                 });
                 var headlineTask = Task.Run(() =>
@@ -147,39 +142,9 @@ namespace ScrollingText
                     foreach (var h in headlines)
                     {
                         headlinesLength += _canvas.DrawText(font, pos + headlinesLength, 29, new Color(255, 255, 0), $"{h.ToUpper()}  ");
-
-                        headlineString = string.Join(headlineString, $"{h.ToUpper()}");
-                        Console.WriteLine(headlineString);
                     }
                 });
                 Task.WaitAll(quoteTask, headlineTask);
-
-                // Normalize strings
-                if (Math.Abs(quotesLength - headlinesLength) <= 8)
-                {
-                    Console.WriteLine("All good");
-                    continue;
-                }
-                if (quotesLength > headlinesLength)
-                {
-                    var mag = Math.Round((double)quotesLength / headlinesLength, MidpointRounding.AwayFromZero);
-                    for (var i = 1; i < mag; i++)
-                    {
-                        headlineString = string.Join(headlineString, headlineString);
-                        Console.WriteLine("Joining Headline String");
-                    }
-                }
-                else
-                {
-                    var mag = Math.Round((double)headlinesLength / headlinesLength, MidpointRounding.AwayFromZero);
-                    for (var i = 1; i < mag; i++)
-                    {
-                        quoteString = string.Join(quoteString, quoteString);
-                        Console.WriteLine("Joining Quote String");
-                    }
-                }
-
-                //Console.WriteLine($"Quote String: {quoteString.Length} HeadlineString: {headlineString.Length}");
 
                 // Scroll text
                 pos--;
@@ -216,7 +181,7 @@ namespace ScrollingText
         private static IEnumerable<string> GetHeadlines()
         {
             const string path = "../data/headlines.txt";
-            return File.ReadAllLines(path).ToList().Take(4);
+            return File.ReadAllLines(path).ToList().Take(5);
         }
 
         private static void OnProcessExit(object sender, EventArgs e)
