@@ -48,6 +48,8 @@ namespace ScrollingText
         {
             var font = new RGBLedFont("../fonts/9x15B.bdf");
             var pos = _canvas.Width;
+            
+            Console.WriteLine("Scrolling text");
 
             while (true)
             {
