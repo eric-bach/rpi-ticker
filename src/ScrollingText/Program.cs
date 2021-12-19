@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -19,13 +20,13 @@ namespace ScrollingText
     {
         private static RGBLedCanvas _canvas;
 
-        public static void Main(string[] args)
+        public static void Main()
         {
-            //AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
-            Console.CancelKeyPress += new ConsoleCancelEventHandler(OnProcessExit);
+            // Clean up matrix on process exit
+            Console.CancelKeyPress += OnProcessExit;
 
-            Console.WriteLine("Started");
-            
+            Debug.WriteLine("Initializing rpi-ticker");
+
             var matrix = new RGBLedMatrix(new RGBLedMatrixOptions
             {
                 Rows = 32,
@@ -38,32 +39,27 @@ namespace ScrollingText
 
             _canvas = matrix.CreateOffscreenCanvas();
 
+            Debug.WriteLine("Starting rpi-ticker");
+
             RunTicker(matrix);
         }
 
         private static void RunTicker(RGBLedMatrix matrix)
         {
-            // TODO Find a bigger font
             var font = new RGBLedFont("../fonts/9x15B.bdf");
             var pos = _canvas.Width;
 
+            _canvas.Clear();
             while (true)
             {
-                _canvas.Clear();
-
-                // TODO Get stock prices and news from file in a thread
+                // Read quotes and headlines from file
                 IEnumerable<QuoteData> quotes = new List<QuoteData>();
                 IEnumerable<string> headlines = new List<string>();
-                var getQuotesTask = Task.Run(() =>
-                {
-                    quotes = GetQuotes();
-                });
-                var getHeadlinesTask = Task.Run(() =>
-                {
-                    headlines = GetHeadlines();
-                });
+                var getQuotesTask = Task.Run(() => { quotes = GetQuotes(); });
+                var getHeadlinesTask = Task.Run(() => { headlines = GetHeadlines(); });
                 Task.WaitAll(getQuotesTask, getHeadlinesTask);
 
+                // Print quotes and headlines to canvas
                 var quotesLength = 0;
                 var headlinesLength = 0;
                 var quoteTask = Task.Run(() =>
@@ -81,7 +77,6 @@ namespace ScrollingText
                 });
                 var headlineTask = Task.Run(() =>
                 {
-                    //headlinesLength += _canvas.DrawText(font, pos - 10, 29, new Color(255, 255, 0), headlines.First().ToUpper());
                     foreach (var h in headlines)
                     {
                         headlinesLength += _canvas.DrawText(font, pos + headlinesLength, 29, new Color(255, 255, 0), $"{h.ToUpper()}  ");
@@ -89,6 +84,7 @@ namespace ScrollingText
                 });
                 Task.WaitAll(quoteTask, headlineTask);
 
+                // Scroll text
                 pos--;
                 if (pos + Math.Max(quotesLength, headlinesLength) < 0)
                 {
@@ -128,8 +124,9 @@ namespace ScrollingText
 
         private static void OnProcessExit(object sender, EventArgs e)
         {
-            Console.WriteLine("Shut down");
+            Console.WriteLine("Interrupt: rpi-ticker shutting down");
             _canvas.Clear();
+            Console.WriteLine("Good-bye");
         }
     }
 }
