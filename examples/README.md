@@ -17,10 +17,20 @@ Then, in the root directory for the matrix library type
 make build-csharp
 ```
 
-To run the example applications in the c#\examples folder
+To run the example applications in the `./examples` folder
+
+### font-example.exe
 
 ```shell
-sudo mono minimal-example.exe
+sudo mono minimal-example.exe ../fonts/9x10.bdf
+```
+
+### matrix-rain.exe
+
+Displays a matrix waterfall like the movie
+
+```shell
+sudo mono matrix-rain.exe
 ```
 
 ## Notes

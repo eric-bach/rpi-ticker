@@ -14,7 +14,6 @@ namespace matrix_rain
 
         static int Main(string[] args)
         {
-
             var matrix = new RGBLedMatrix(new RGBLedMatrixOptions { 
                 Rows = 32,
                 Cols = 64,

@@ -8,7 +8,16 @@ namespace pulsing_brightness
     {
         static int Main(string[] args)
         {
-            var matrix = new RGBLedMatrix(new RGBLedMatrixOptions {Rows = 32, Cols = 64});
+            var matrix = new RGBLedMatrix(new RGBLedMatrixOptions
+            {
+                Rows = 32,
+                Cols = 64,
+                ChainLength = 2,
+                Brightness = 65,
+                // ReSharper disable once StringLiteralTypo
+                HardwareMapping = "adafruit-hat"
+            });
+
             var canvas = matrix.CreateOffscreenCanvas();
             var maxBrightness = matrix.Brightness;
             var count = 0;

@@ -9,14 +9,15 @@ namespace minimal_example
 
             //var matrix= new RGBLedMatrix(32, 2, 1);           
 
-            var matrix = new RGBLedMatrix(new RGBLedMatrixOptions()
+            var matrix = new RGBLedMatrix(new RGBLedMatrixOptions
             {
                 Rows = 32,
                 Cols = 64,
                 ChainLength = 2,
-                Brightness = 75,
+                Brightness = 65,
+                // ReSharper disable once StringLiteralTypo
                 HardwareMapping = "adafruit-hat"
-            } );
+            });
 
             var canvas = matrix.CreateOffscreenCanvas();
 

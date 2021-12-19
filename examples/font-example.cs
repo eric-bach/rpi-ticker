@@ -17,8 +17,15 @@ namespace font_example
             if (args.Length > 1)            
                 text = args[1];
             
-
-            var matrix = new RGBLedMatrix(32, 2, 1);
+            var matrix = new RGBLedMatrix(new RGBLedMatrixOptions
+            {
+                Rows = 32,
+                Cols = 64,
+                ChainLength = 2,
+                Brightness = 65,
+                // ReSharper disable once StringLiteralTypo
+                HardwareMapping = "adafruit-hat"
+            });
             var canvas = matrix.CreateOffscreenCanvas();
             var font = new RGBLedFont(args[0]);
 
