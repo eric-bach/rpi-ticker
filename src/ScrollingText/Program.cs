@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -51,7 +52,7 @@ namespace ScrollingText
     public class Program
     {
         private static RGBLedCanvas _canvas;
-        public static Dictionary<string, QuoteSummary> _quotes { get; set; } = new Dictionary<string, QuoteSummary>();
+        public static ConcurrentDictionary<string, QuoteSummary> _quotes { get; set; } = new ConcurrentDictionary<string, QuoteSummary>();
 
         public static void Main()
         {
