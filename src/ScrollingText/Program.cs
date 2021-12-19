@@ -125,7 +125,7 @@ namespace ScrollingText
                 if (i != 0 && i % symbols.Length == 0)
                 {
                     Console.WriteLine("Waiting for next batch of quotes");
-                    Thread.Sleep(60000);
+                    Thread.Sleep(5000);
                 }
             }
         }
@@ -141,10 +141,10 @@ namespace ScrollingText
             {
                 _canvas.Clear();
 
-                // Read quotes and headlines from file
-                IEnumerable<string> headlines = new List<string>();
-                var getHeadlinesTask = Task.Run(() => { headlines = GetHeadlines(); });
-                Task.WaitAll(getHeadlinesTask);
+                //// Read quotes and headlines from file
+                //IEnumerable<string> headlines = new List<string>();
+                //var getHeadlinesTask = Task.Run(() => { headlines = GetHeadlines(); });
+                //Task.WaitAll(getHeadlinesTask);
 
                 // Print quotes and headlines to canvas
                 var quotesLength = 0;
@@ -162,15 +162,16 @@ namespace ScrollingText
                             $"({(q.Value.Change > 0 ? "+" : "")}{q.Value.Change:0.00})");
                     }
                 });
-                var headlineTask = Task.Run(() =>
-                {
-                    foreach (var h in headlines)
-                    {
-                        headlinesLength += _canvas.DrawText(font, pos + headlinesLength, 29, new Color(255, 255, 0), $"{h.ToUpper()}");
-                        headlinesLength += _canvas.DrawText(font, pos + headlinesLength, 29, new Color(255, 0, 0), " *** ");
-                    }
-                });
-                Task.WaitAll(quoteTask, headlineTask);
+                Task.WaitAll(quoteTask);
+                //var headlineTask = Task.Run(() =>
+                //{
+                //    foreach (var h in headlines)
+                //    {
+                //        headlinesLength += _canvas.DrawText(font, pos + headlinesLength, 29, new Color(255, 255, 0), $"{h.ToUpper()}");
+                //        headlinesLength += _canvas.DrawText(font, pos + headlinesLength, 29, new Color(255, 0, 0), " *** ");
+                //    }
+                //});
+                //Task.WaitAll(quoteTask, headlineTask);
 
                 // Scroll text
                 pos--;
