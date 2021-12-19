@@ -49,9 +49,10 @@ namespace ScrollingText
             var font = new RGBLedFont("../fonts/9x15B.bdf");
             var pos = _canvas.Width;
 
-            _canvas.Clear();
             while (true)
             {
+                _canvas.Clear();
+
                 // Read quotes and headlines from file
                 IEnumerable<QuoteData> quotes = new List<QuoteData>();
                 IEnumerable<string> headlines = new List<string>();
