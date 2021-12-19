@@ -132,6 +132,8 @@ namespace ScrollingText
                     }
                 }
 
+                Console.WriteLine($"{_headlines.Count} headlines in queue");
+
                 Console.WriteLine("Waiting for next news update");
                 Thread.Sleep(30000);
                 //Thread.Sleep(1800000);
