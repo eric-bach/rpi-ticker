@@ -12,13 +12,13 @@ const matrix = new LedMatrix(
     cols: 64,
     chainLength: 2,
     hardwareMapping: GpioMapping.AdafruitHat,
-    pixelMapperConfig: LedMatrixUtils.encodeMappers({
-      type: PixelMapperType.U,
-    }),
+    //pixelMapperConfig: LedMatrixUtils.encodeMappers({
+    //  type: PixelMapperType.U,
+    //}),
   },
   {
     ...LedMatrix.defaultRuntimeOptions(),
-    gpioSlowdown: 1,
+    //gpioSlowdown: 1,
   }
 );
 
