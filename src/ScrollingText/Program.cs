@@ -83,9 +83,7 @@ namespace ScrollingText
 
         private static async void GetData()
         {
-            Console.WriteLine("Getting quotes");
-
-            var symbols = new string[]
+            var symbols = new []
             {
                 "AC.TO",
                 "AMZN",
@@ -103,10 +101,13 @@ namespace ScrollingText
                 "ZAG.TO",
                 "ZRE.TO",
             };
+            
+            Console.WriteLine("Getting quotes");
 
             var i = 0;
             while (true)
             {
+               
                 var client = new HttpClient();
                 var response =
                     await client.GetAsync(
@@ -114,12 +115,11 @@ namespace ScrollingText
                 response.EnsureSuccessStatusCode();
                 var responseBody = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<Quote>(responseBody);
-                Console.Write(result.quoteSummary.result.First().price.symbol);
-                Console.Write(result.quoteSummary.result.First().price.regularMarketPrice.raw);
-                Console.WriteLine(result.quoteSummary.result.First().price.regularMarketChange.raw);
+                Console.WriteLine($"{result.quoteSummary.result.First().price.symbol} {result.quoteSummary.result.First().price.regularMarketPrice.raw} {result.quoteSummary.result.First().price.regularMarketChange.raw}");
 
                 if (i != 0 && i % symbols.Length == 0)
                 {
+                    Console.WriteLine("Waiting for next batch of quotes");
                     Thread.Sleep(60000);
                 }
             }
@@ -173,6 +173,7 @@ namespace ScrollingText
                 pos--;
                 if (pos + Math.Max(quotesLength, headlinesLength) < 0)
                 {
+                    Console.WriteLine("WRAPPING TEXT");
                     pos = _canvas.Width;
                 }
 
