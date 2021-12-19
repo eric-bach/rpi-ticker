@@ -1,4 +1,9 @@
-const matrix = require('rpi-led-matrix');
+import {
+  LedMatrix,
+  GpioMapping,
+  LedMatrixUtils,
+  PixelMapperType,
+} from 'rpi-led-matrix';
 
 const matrix = new LedMatrix(
   {
@@ -19,10 +24,7 @@ const matrix = new LedMatrix(
 
 matrix.clear();
 
-matrix.drawCircle(
-  matrix.width() / 2,
-  matrix.height() / 2,
-  matrix.width() / 2 - 1
-);
+const fgColor = matrix.fgColor();
+matrix.fgColor(matrix.bgColor()).fill().fgColor(fgColor);
 
-matrix.sync();
+matrix.drawText('Hello', 0, 0);
