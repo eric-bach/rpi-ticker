@@ -159,7 +159,7 @@ namespace ScrollingText
                     var mag = Math.Round((double)quotesLength / headlinesLength, MidpointRounding.AwayFromZero);
                     for (var i = 1; i < mag; i++)
                     {
-                        headlineString += headlineString;
+                        headlineString = string.Join(headlineString, headlineString);
                     }
                 }
                 else
@@ -167,7 +167,8 @@ namespace ScrollingText
                     var mag = Math.Round((double)headlinesLength / headlinesLength, MidpointRounding.AwayFromZero);
                     for (var i = 1; i < mag; i++)
                     {
-                        quoteString += quoteString;
+                        quoteString = string.Join(quoteString, quoteString);
+                        Console.WriteLine("Joining Quote String");
                     }
                 }
 
