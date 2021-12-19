@@ -51,6 +51,8 @@ namespace ScrollingText
 
             Console.WriteLine("Scrolling text");
 
+            var client = new System.Net.Http.HttpClient();
+
             while (true)
             {
                 _canvas.Clear();
