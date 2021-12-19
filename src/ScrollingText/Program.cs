@@ -85,17 +85,37 @@ namespace ScrollingText
         {
             Console.WriteLine("Getting quotes");
 
+            var symbols = new string[]
+            {
+                "AC.TO",
+                "AMZN",
+                "BMO.TO",
+                "DDOG",
+                "LYFT",
+                "MSFT",
+                "NIO",
+                "PTON",
+                "SNOW",
+                "TD.TO",
+                "TSLA",
+                "VGRO.TO",
+                "VXC.TO",
+                "ZAG.TO",
+                "ZRE.TO",
+            };
+
+            var i = 0;
             while (true)
             {
                 var client = new HttpClient();
                 var response =
                     await client.GetAsync(
-                        "https://query1.finance.yahoo.com/v10/finance/quoteSummary/DDOG?modules=price");
+                        $"https://query1.finance.yahoo.com/v10/finance/quoteSummary/{symbols[i % symbols.Length]}?modules=price");
                 response.EnsureSuccessStatusCode();
                 var responseBody = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<Quote>(responseBody);
-                Console.WriteLine(result.quoteSummary.result.First().price.symbol);
-                Console.WriteLine(result.quoteSummary.result.First().price.regularMarketPrice.raw);
+                Console.Write(result.quoteSummary.result.First().price.symbol);
+                Console.Write(result.quoteSummary.result.First().price.regularMarketPrice.raw);
                 Console.WriteLine(result.quoteSummary.result.First().price.regularMarketChange.raw);
 
                 Thread.Sleep(5000);
