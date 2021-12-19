@@ -11,11 +11,13 @@ RGB_LIBRARY=$(RGB_LIBDIR)/$(RGB_LIBRARY_NAME).so.1
 
 all: $(CSHARP_LIB)
 	cp $(RGB_LIBRARY) $(RGB_LIBRARY_NAME).so
+	cp $(CSHARP_LIBDIR)/$(CSHARP_JSON_LIB) $(CSHARP_JSON_LIB)
 	cp $(CSHARP_LIBRARY) $(CSHARP_LIB)
 	$(CSHARP_COMPILER) -r:$(CSHARP_LIB) -r:$(CSHARP_HTTP_LIB) -r:$(CSHARP_JSON_LIB) -out:rpi-ticker.exe ./ScrollingText/Program.cs
 
 rpi-ticker.exe: $(CSHARP_LIB)
 	cp $(RGB_LIBRARY) $(RGB_LIBRARY_NAME).so
+	cp $(CSHARP_LIBDIR)/$(CSHARP_JSON_LIB) $(CSHARP_JSON_LIB)
 	cp $(CSHARP_LIBRARY) $(CSHARP_LIB)
 	$(CSHARP_COMPILER) -r:$(CSHARP_LIB) -r:$(CSHARP_HTTP_LIB) -r:$(CSHARP_JSON_LIB) -out:rpi-ticker.exe ./ScrollingText/Program.cs
 

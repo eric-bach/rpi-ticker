@@ -78,7 +78,7 @@ namespace ScrollingText
             var responseBody = response.Content.ReadAsStringAsync().Result;
             var result = JsonConvert.DeserializeObject<Quote>(responseBody);
             Console.WriteLine(result.chart.result.First().meta.regularMarketPrice);
-            Console.WriteLine(responseBody);
+            //Console.WriteLine(responseBody);
 
             while (true)
             {
