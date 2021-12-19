@@ -111,7 +111,6 @@ namespace ScrollingText
         {
             Console.WriteLine("Getting headlines");
 
-            var i = 0;
             while (true)
             {
                 var client = new HttpClient();
@@ -137,7 +136,8 @@ namespace ScrollingText
         private static void RunTicker(RGBLedMatrix matrix)
         {
             var font = new RGBLedFont("../fonts/9x15B.bdf");
-            var pos = _canvas.Width;
+            var q_pos = _canvas.Width;
+            var h_pos = _canvas.Width;
 
             Console.WriteLine("Scrolling text");
 
@@ -152,11 +152,11 @@ namespace ScrollingText
                 {
                     foreach (var q in _quotes)
                     {
-                        quotesLength += _canvas.DrawText(font, pos + quotesLength, 13, new Color(0, 0, 255),
+                        quotesLength += _canvas.DrawText(font, q_pos + quotesLength, 13, new Color(0, 0, 255),
                             $" {q.Key} ");
-                        quotesLength += _canvas.DrawText(font, pos + quotesLength, 13, new Color(255, 255, 0),
+                        quotesLength += _canvas.DrawText(font, q_pos + quotesLength, 13, new Color(255, 255, 0),
                             $"{q.Value.Price:0.00} ");
-                        quotesLength += _canvas.DrawText(font, pos + quotesLength, 13,
+                        quotesLength += _canvas.DrawText(font, q_pos + quotesLength, 13,
                             q.Value.Change > 0 ? new Color(0, 255, 0) : new Color(255, 0, 0),
                             $"({(q.Value.Change > 0 ? "+" : "")}{q.Value.Change:0.00})");
                     }
@@ -165,18 +165,24 @@ namespace ScrollingText
                 {
                     foreach (var h in _headlines)
                     {
-                        headlinesLength += _canvas.DrawText(font, pos + headlinesLength, 29, new Color(255, 255, 0), $"{h.ToUpper()}");
-                        headlinesLength += _canvas.DrawText(font, pos + headlinesLength, 29, new Color(255, 0, 0), " *** ");
+                        headlinesLength += _canvas.DrawText(font, h_os + headlinesLength, 29, new Color(255, 255, 0), $"{h.ToUpper()}");
+                        headlinesLength += _canvas.DrawText(font, h_os + headlinesLength, 29, new Color(255, 0, 0), " *** ");
                     }
                 });
                 Task.WaitAll(quoteTask, headlineTask);
 
                 // Scroll text
-                pos--;
-                if (pos + Math.Max(quotesLength, headlinesLength) < 0)
+                q_pos--;
+                h_pos--;
+                if (q_pos + quotesLength < 0)
                 {
-                    Console.WriteLine("WRAPPING TEXT");
-                    pos = _canvas.Width;
+                    Console.WriteLine("### QUOTES WRAPPING TEXT");
+                    q_pos = _canvas.Width;
+                }
+                if (h_pos + headlinesLength < 0)
+                {
+                    Console.WriteLine("### HEADLINES WRAPPING TEXT");
+                    h_pos = _canvas.Width;
                 }
 
                 Thread.Sleep(30);
