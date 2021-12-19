@@ -10,9 +10,8 @@ using rpi_rgb_led_matrix_sharp;
 
 namespace ScrollingText
 {
-    public class QuoteData
+    public class QuoteSummary
     {
-        public string Symbol { get; set; }
         public decimal Price { get; set; }
         public decimal Change { get; set; }
     }
@@ -52,6 +51,7 @@ namespace ScrollingText
     public class Program
     {
         private static RGBLedCanvas _canvas;
+        public static Dictionary<string, QuoteSummary> _quotes { get; set; } = new Dictionary<string, QuoteSummary>();
 
         public static void Main()
         {
@@ -75,7 +75,7 @@ namespace ScrollingText
             Console.WriteLine("Starting rpi-ticker");
 
             Parallel.Invoke(
-                () => { GetData(); }, 
+                () => { GetData(); },
                 () => { RunTicker(matrix); }
             );
         }
@@ -83,7 +83,7 @@ namespace ScrollingText
 
         private static async void GetData()
         {
-            var symbols = new []
+            var symbols = new[]
             {
                 "AC.TO",
                 "AMZN",
@@ -101,13 +101,12 @@ namespace ScrollingText
                 "ZAG.TO",
                 "ZRE.TO",
             };
-            
+
             Console.WriteLine("Getting quotes");
 
             var i = 0;
             while (true)
             {
-               
                 var client = new HttpClient();
                 var response =
                     await client.GetAsync(
@@ -117,6 +116,12 @@ namespace ScrollingText
                 var result = JsonConvert.DeserializeObject<Quote>(responseBody);
                 Console.WriteLine($"{result.quoteSummary.result.First().price.symbol} {result.quoteSummary.result.First().price.regularMarketPrice.raw} {result.quoteSummary.result.First().price.regularMarketChange.raw}");
 
+                _quotes[result.quoteSummary.result.First().price.symbol] = new QuoteSummary
+                {
+                    Price = result.quoteSummary.result.First().price.regularMarketPrice.raw,
+                    Change = result.quoteSummary.result.First().price.regularMarketChange.raw
+                };
+                
                 if (i != 0 && i % symbols.Length == 0)
                 {
                     Console.WriteLine("Waiting for next batch of quotes");
@@ -137,26 +142,23 @@ namespace ScrollingText
                 _canvas.Clear();
 
                 // Read quotes and headlines from file
-                IEnumerable<QuoteData> quotes = new List<QuoteData>();
                 IEnumerable<string> headlines = new List<string>();
-                var getQuotesTask = Task.Run(() => { quotes = GetQuotes(); });
                 var getHeadlinesTask = Task.Run(() => { headlines = GetHeadlines(); });
-                Task.WaitAll(getQuotesTask, getHeadlinesTask);
 
                 // Print quotes and headlines to canvas
                 var quotesLength = 0;
                 var headlinesLength = 0;
                 var quoteTask = Task.Run(() =>
                 {
-                    foreach (var q in quotes)
+                    foreach (var q in _quotes)
                     {
                         quotesLength += _canvas.DrawText(font, pos + quotesLength, 13, new Color(0, 0, 255),
-                            $" {q.Symbol} ");
+                            $" {q.Key} ");
                         quotesLength += _canvas.DrawText(font, pos + quotesLength, 13, new Color(255, 255, 0),
-                            $"{q.Price:0.00} ");
+                            $"{q.Value.Price:0.00} ");
                         quotesLength += _canvas.DrawText(font, pos + quotesLength, 13,
-                            q.Change > 0 ? new Color(0, 255, 0) : new Color(255, 0, 0),
-                            $"({(q.Change > 0 ? "+" : "")}{q.Change:0.00})");
+                            q.Value.Change > 0 ? new Color(0, 255, 0) : new Color(255, 0, 0),
+                            $"({(q.Value.Change > 0 ? "+" : "")}{q.Value.Change:0.00})");
                     }
                 });
                 var headlineTask = Task.Run(() =>
@@ -180,26 +182,6 @@ namespace ScrollingText
                 Thread.Sleep(30);
                 _canvas = matrix.SwapOnVsync(_canvas);
             }
-        }
-
-        private static IEnumerable<QuoteData> GetQuotes()
-        {
-            const string path = "../data/quotes.txt";
-            var lines = File.ReadAllLines(path);
-
-            var obj = new List<QuoteData>();
-            foreach (var line in lines)
-            {
-                var values = line.Split(',');
-                obj.Add(new QuoteData
-                {
-                    Symbol = values[0],
-                    Price = decimal.Parse(values[1]),
-                    Change = decimal.Parse(values[2]),
-                });
-            }
-
-            return obj;
         }
 
         private static IEnumerable<string> GetHeadlines()
