@@ -23,66 +23,6 @@ namespace ScrollingText
         {
             // Clean up matrix on process exit
             Console.CancelKeyPress += OnProcessExit;
-            
-            /*
-            while (true)
-            {
-                // Read quotes and headlines from file
-                IEnumerable<QuoteData> quotes = new List<QuoteData>();
-                IEnumerable<string> headlines = new List<string>();
-                var getQuotesTask = Task.Run(() => { quotes = GetQuotes(); });
-                var getHeadlinesTask = Task.Run(() => { headlines = GetHeadlines(); });
-                Task.WaitAll(getQuotesTask, getHeadlinesTask);
-
-                var tempQuotes = string.Empty;
-                var tempHeadlines = string.Empty;
-
-                // Print quotes and headlines to canvas
-                var quotesLength = 0;
-                var headlinesLength = 0;
-                var quoteTask = Task.Run(() =>
-                {
-                    foreach (var q in quotes)
-                    {
-                        var a = $" {q.Symbol} ";
-                        var b = $"{q.Price:0.00} ";
-                        var c = $"({(q.Change > 0 ? "+" : "")}{q.Change:0.00})";
-
-                        tempQuotes += $"{a}{b}{c}";
-                        quotesLength += a.Length + b.Length + c.Length;
-                    }
-                });
-                var headlineTask = Task.Run(() =>
-                {
-                    foreach (var h in headlines)
-                    {
-                        var d = "{h.ToUpper()}  ";
-
-                        tempHeadlines += $"{d}";
-                        headlinesLength += d.Length;
-                    }
-                });
-                Task.WaitAll(quoteTask, headlineTask);
-
-                if (Math.Abs(quotesLength - headlinesLength) <= 8) continue;
-                if (quotesLength > headlinesLength)
-                {
-                    var mag = Math.Round((double)quotesLength / headlinesLength, MidpointRounding.AwayFromZero);
-                    for (var i = 1; i < mag; i++)
-                    {
-                        tempHeadlines.Concat(tempHeadlines);
-                    }
-                }
-                else
-                {
-                    var mag = Math.Round((double)headlinesLength / headlinesLength, MidpointRounding.AwayFromZero);
-                    for (var i = 1; i < mag; i++)
-                    {
-                        tempQuotes.Contains(tempQuotes);
-                    }
-                }
-            }
-            */
 
             Console.WriteLine("Initializing rpi-ticker");
 
