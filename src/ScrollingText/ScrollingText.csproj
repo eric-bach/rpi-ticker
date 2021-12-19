@@ -8,8 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\bindings\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="RGBLedMatrix">
-      <HintPath>C:\Projects\rpi-ticker\bindings\RGBLedMatrix.dll</HintPath>
+      <HintPath>..\..\bindings\RGBLedMatrix.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http">
       <HintPath>..\..\bindings\System.Net.Http.dll</HintPath>

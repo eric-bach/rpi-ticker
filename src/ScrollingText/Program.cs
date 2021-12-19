@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 using rpi_rgb_led_matrix_sharp;
@@ -44,6 +46,26 @@ namespace ScrollingText
             RunTicker(matrix);
         }
 
+        public class Quote
+        {
+            public Chart chart{ get; set; }
+
+            public class Chart
+            {
+                public ICollection<Result> result { get; set; }
+
+                public class Result
+                {
+                    public Meta meta { get; set; }
+
+                    public class Meta
+                    {
+                        public string symbol { get; set; }
+                        public decimal regularMarketPrice { get; set; }
+                    }
+                }
+            }
+        }
         private static void RunTicker(RGBLedMatrix matrix)
         {
             var font = new RGBLedFont("../fonts/9x15B.bdf");
@@ -51,10 +73,11 @@ namespace ScrollingText
 
             Console.WriteLine("Scrolling text");
 
-            var client = new System.Net.Http.HttpClient();
+            var client = new HttpClient();
             var response = client.GetAsync("https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?region=US&lang=en-US").Result;
             response.EnsureSuccessStatusCode();
             var responseBody = response.Content.ReadAsStringAsync().Result;
+            var result = JsonSerializer.Deserialize<Quote>(responseBody);
             Console.WriteLine(responseBody);
 
             while (true)
