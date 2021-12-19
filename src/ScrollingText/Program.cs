@@ -138,7 +138,7 @@ namespace ScrollingText
                             q.Change > 0 ? new Color(0, 255, 0) : new Color(255, 0, 0),
                             $"({(q.Change > 0 ? "+" : "")}{q.Change:0.00})");
 
-                        quoteString = $" {q.Symbol} {q.Price:0.00} ({(q.Change > 0 ? "+" : "")}{q.Change:0.00})";
+                        quoteString = string.Join(quoteString, $" {q.Symbol} {q.Price:0.00} ({(q.Change > 0 ? "+" : "")}{q.Change:0.00})");
                     }
                 });
                 var headlineTask = Task.Run(() =>
@@ -147,19 +147,24 @@ namespace ScrollingText
                     {
                         headlinesLength += _canvas.DrawText(font, pos + headlinesLength, 29, new Color(255, 255, 0), $"{h.ToUpper()}  ");
 
-                        headlineString = $"{h.ToUpper()}";
+                        headlineString = string.Join(headlineString, $"{h.ToUpper()}");
                     }
                 });
                 Task.WaitAll(quoteTask, headlineTask);
 
                 // Normalize strings
-                if (Math.Abs(quotesLength - headlinesLength) <= 8) continue;
+                if (Math.Abs(quotesLength - headlinesLength) <= 8)
+                {
+                    Console.WriteLine("All good");
+                    continue;
+                }
                 if (quotesLength > headlinesLength)
                 {
                     var mag = Math.Round((double)quotesLength / headlinesLength, MidpointRounding.AwayFromZero);
                     for (var i = 1; i < mag; i++)
                     {
                         headlineString = string.Join(headlineString, headlineString);
+                        Console.WriteLine("Joining Headline String");
                     }
                 }
                 else
