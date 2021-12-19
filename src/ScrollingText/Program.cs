@@ -17,38 +17,6 @@ namespace ScrollingText
         public decimal Change { get; set; }
     }
 
-    public class Quote
-    {
-        public QuoteSummary quoteSummary { get; set; }
-
-        public class QuoteSummary
-        {
-            public ICollection<Result> result { get; set; }
-
-            public class Result
-            {
-                public Price price { get; set; }
-
-                public class Price
-                {
-                    public string symbol { get; set; }
-                    public RegularMarketPrice regularMarketPrice { get; set; }
-                    public RegularMarketChange regularMarketChange { get; set; }
-
-                    public class RegularMarketPrice
-                    {
-                        public decimal raw { get; set; }
-                    }
-
-                    public class RegularMarketChange
-                    {
-                        public decimal raw { get; set; }
-                    }
-                }
-            }
-        }
-    }
-
     public class Program
     {
         private static RGBLedCanvas _canvas;
@@ -115,12 +83,13 @@ namespace ScrollingText
                 response.EnsureSuccessStatusCode();
                 var responseBody = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<Quote>(responseBody);
-                Console.WriteLine($"{result.quoteSummary.result.First().price.symbol} {result.quoteSummary.result.First().price.regularMarketPrice.raw} {result.quoteSummary.result.First().price.regularMarketChange.raw}");
+                Console.WriteLine(
+                    $"{result.quoteSummary.result.First().price.symbol} {result.quoteSummary.result.First().price.regularMarketPrice.raw} {result.quoteSummary.result.First().price.regularMarketChange.raw}");
 
                 _quotes[result.quoteSummary.result.First().price.symbol] = new QuoteSummary
                 {
-                    Price = result.quoteSummary.result.First().price.regularMarketPrice.raw + 1,
-                    Change = result.quoteSummary.result.First().price.regularMarketChange.raw + 1
+                    Price = result.quoteSummary.result.First().price.regularMarketPrice.raw,
+                    Change = result.quoteSummary.result.First().price.regularMarketChange.raw
                 };
                 
                 if (i != 0 && i % symbols.Length == 0)
