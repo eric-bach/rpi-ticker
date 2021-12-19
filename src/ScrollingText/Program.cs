@@ -181,7 +181,7 @@ namespace ScrollingText
                 }
                 if (h_pos + headlinesLength < 0)
                 {
-                    Console.WriteLine("### HEADLINES WRAPPING TEXT");
+                    Console.WriteLine($"### HEADLINES WRAPPING TEXT: {_headlines.Count}");
                     h_pos = _canvas.Width;
                 }
 
