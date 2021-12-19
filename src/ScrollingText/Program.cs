@@ -74,8 +74,10 @@ namespace ScrollingText
 
             Console.WriteLine("Starting rpi-ticker");
 
-            Task.Run(() => GetData());
-            Task.Run(() => RunTicker(matrix));
+            Parallel.Invoke(
+                () => { GetData(); }, 
+                () => { RunTicker(matrix); }
+            );
         }
 
 
