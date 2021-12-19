@@ -47,21 +47,32 @@ namespace ScrollingText
 
         public class Quote
         {
-            public Chart chart{ get; set; }
+            public QuoteSummary quoteSummary{ get; set; }
 
-            public class Chart
+            public class QuoteSummary
             {
                 public ICollection<Result> result { get; set; }
 
                 public class Result
                 {
-                    public Meta meta { get; set; }
+                    public Price price { get; set; }
 
-                    public class Meta
+                    public class Price
                     {
                         public string symbol { get; set; }
-                        public decimal regularMarketPrice { get; set; }
-                    }
+                        public RegularMarketPrice regularMarketPrice { get; set; }
+                        public RegularMarketChange regularMarketChange { get; set; }
+
+                        public class RegularMarketPrice
+                        {
+                            public decimal raw { get; set; }
+                        }
+
+                        public class RegularMarketChange 
+                        {
+                            public decimal raw { get; set; }
+                        }
+                }
                 }
             }
         }
@@ -73,12 +84,13 @@ namespace ScrollingText
             Console.WriteLine("Scrolling text");
 
             var client = new HttpClient();
-            var response = client.GetAsync("https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?region=US&lang=en-US").Result;
+            var response = client.GetAsync("https://query1.finance.yahoo.com/v10/finance/quoteSummary/DDOG?modules=price").Result;
             response.EnsureSuccessStatusCode();
             var responseBody = response.Content.ReadAsStringAsync().Result;
             var result = JsonConvert.DeserializeObject<Quote>(responseBody);
-            Console.WriteLine(result.chart.result.First().meta.regularMarketPrice);
-            //Console.WriteLine(responseBody);
+            Console.WriteLine(result.quoteSummary.result.First().price.symbol);
+            Console.WriteLine(result.quoteSummary.result.First().price.regularMarketPrice.raw);
+            Console.WriteLine(result.quoteSummary.result.First().price.regularMarketChange.raw);
 
             while (true)
             {
