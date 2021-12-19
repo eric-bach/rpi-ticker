@@ -125,7 +125,11 @@ namespace ScrollingText
                 foreach (var title in result.results.Select(r => r.title))
                 {
                     Console.WriteLine(title);
-                    _headlines.Enqueue(title);
+
+                    if (!_headlines.Contains(title))
+                    {
+                        _headlines.Enqueue(title);
+                    }
                 }
 
                 Console.WriteLine("Waiting for next news update");
@@ -165,10 +169,7 @@ namespace ScrollingText
                 {
                     foreach (var h in _headlines)
                     {
-                        _headlines.TryDequeue(out var headline);
-                        if (headline == null) continue;
-
-                        headlinesLength += _canvas.DrawText(font, h_pos + headlinesLength, 29, new Color(255, 255, 0), $"{headline.ToUpper()}");
+                        headlinesLength += _canvas.DrawText(font, h_pos + headlinesLength, 29, new Color(255, 255, 0), $"{h.ToUpper()}");
                         headlinesLength += _canvas.DrawText(font, h_pos + headlinesLength, 29, new Color(255, 0, 0), " *** ");
                     }
                 });
