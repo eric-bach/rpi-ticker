@@ -102,7 +102,7 @@ namespace ScrollingText
                 if (i != 0 && i % symbols.Length == 0)
                 {
                     Console.WriteLine("Waiting for next batch of quotes");
-                    Thread.Sleep(30000);
+                    Thread.Sleep(60000);
                 }
             }
         }
@@ -129,7 +129,7 @@ namespace ScrollingText
                 }
 
                 Console.WriteLine("Waiting for next news update");
-                Thread.Sleep(60000);
+                Thread.Sleep(1800000);
             }
         }
 
