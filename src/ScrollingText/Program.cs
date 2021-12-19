@@ -28,6 +28,14 @@ namespace ScrollingText
             // Clean up matrix on process exit
             Console.CancelKeyPress += OnProcessExit;
 
+            Console.WriteLine("Loading configuration");
+
+            var root = Directory.GetCurrentDirectory();
+            var dotenv = Path.Combine(root, ".env");
+            DotEnv.Load(dotenv);
+
+            Console.WriteLine(Environment.GetEnvironmentVariable("NEWSDATA_API_KEY"));
+
             Console.WriteLine("Initializing rpi-ticker");
 
             var matrix = new RGBLedMatrix(new RGBLedMatrixOptions
@@ -112,7 +120,8 @@ namespace ScrollingText
                 var client = new HttpClient();
                 var response =
                     await client.GetAsync(
-                        $"https://newsdata.io/api/1/news?apikey={process.env.NEWSDATA_API_KEY}&language=en&country=ca&q=headlines");
+                        $"https://newsdata.io/api/1/news?apikey={Environment.GetEnvironmentVariable("NEWSDATA_API_KEY")}&language=en&country=ca&q=headlines");
+
                 response.EnsureSuccessStatusCode();
                 var responseBody = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<Headlines>(responseBody);
