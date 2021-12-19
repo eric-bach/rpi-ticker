@@ -14,6 +14,9 @@
     <Reference Include="System.Net.Http">
       <HintPath>..\..\bindings\System.Net.Http.dll</HintPath>
     </Reference>
+    <Reference Include="System.Net.Http">
+      <HintPath>..\..\bindings\System.Text.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
