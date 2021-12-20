@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -28,6 +28,9 @@
     </Reference>
     <Reference Include="RGBLedMatrix">
       <HintPath>..\bindings\RGBLedMatrix.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration.ConfigurationManager">
+      <HintPath>..\bindings\System.Configuration.ConfigurationManager.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http">
       <HintPath>..\bindings\System.Net.Http.dll</HintPath>
