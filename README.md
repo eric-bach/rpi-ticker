@@ -2,7 +2,7 @@
 
 This project contains the source code for deploying a news headline and stock ticker powered by RGB LED matrix panels and the [Raspberry Pi control library](https://github.com/hzeller/rpi-rgb-led-matrix) from [hzeller](https://github.com/hzeller). The specific RGB LED matrix panels and bonnet/HAT I used for this project were sourced from [Adafruit](https://www.adafruit.com) but others may work as well.
 
-A NodeJS application running in a cron job periodically fetches stock quotes and news headlines from [Yahoo Finance](https://finance.yahoo.com/) and [Newsdata.IO](https://newsdata.io/). The data is saved to a text file on the local storage which is read by the rpi-ticker program which is writen using the C# binding from [hzeller's Raspberry Pi control library](https://github.com/hzeller/rpi-rgb-led-matrix).
+The `src` folder contains the application using the C# bindings from [hzeller's Raspberry Pi control library](https://github.com/hzeller/rpi-rgb-led-matrix) to fetch stock quotes and news headlines from [Yahoo Finance](https://finance.yahoo.com/) and [Newsdata.IO](https://newsdata.io/).
 
 ## Getting started
 
@@ -27,34 +27,6 @@ If you would like to get started with some simple examples before setting up the
 
    ```shell
    make build-csharp
-   ```
-
-## Configure the cron job
-
-The `ApiJs` app retrieves stock quotes (Yahoo Finance) and news headlines (NewsData.IO) via a cron job
-
-1. Setup a NewsData.IO API Key and create a `src/ApiJs/.env` file from the `src/ApiJs/.env.example` file
-
-   ```
-   NEWSDATA_API_KEY={{REPLACE_ME}}
-   ```
-
-2. Install NodeJS
-
-   ```
-   sudo apt install nodejs
-   ```
-
-3. Edit the `src/ApiJs/index.js` on line 8 file with the stock symbols to retrieve.
-
-   ```
-   var symbols = ['AMZN', 'BMO', 'DDOG', 'LYFT', 'MSFT', 'NIO', 'SNOW', 'TSLA'];
-   ```
-
-4. Create a cron job to run every 5 minutes
-
-   ```
-   * /5 * * * * node /home/pi/Projects/rpi-ticker/src/ApiJs/index.js /home/pi/Projects/rpi-ticker/data >> /home/pi/cron.log 2>&1
    ```
 
 ## Run the text scroller project

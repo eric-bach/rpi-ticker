@@ -398,7 +398,4 @@ FodyWeavers.xsd
 *.exe
 *.o
 *.so
-data/
-
 .env
-package-lock.json
