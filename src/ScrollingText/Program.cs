@@ -27,13 +27,14 @@ namespace ScrollingText
             // Clean up matrix on process exit
             Console.CancelKeyPress += OnProcessExit;
 
-            Console.WriteLine("Loading configuration");
+            Console.WriteLine("INFO  Loading configuration");
 
+            // Load environment variables
             var root = Directory.GetCurrentDirectory();
             var dotenv = Path.Combine(root, ".env");
             DotEnv.Load(dotenv);
 
-            Console.WriteLine("Initializing rpi-ticker");
+            Console.WriteLine("INFO  Initializing rpi-ticker");
 
             var matrix = new RGBLedMatrix(new RGBLedMatrixOptions
             {
@@ -44,10 +45,9 @@ namespace ScrollingText
                 // ReSharper disable once StringLiteralTypo
                 HardwareMapping = "adafruit-hat"
             });
-
             _canvas = matrix.CreateOffscreenCanvas();
 
-            Console.WriteLine("Starting rpi-ticker");
+            Console.WriteLine("INFO  Starting rpi-ticker");
 
             Parallel.Invoke(
                 () => { GetQuotes(); },
@@ -78,65 +78,79 @@ namespace ScrollingText
                 "ZRE.TO",
             };
 
-            Console.WriteLine("Getting quotes");
+            Console.WriteLine("INFO  Getting quotes");
 
             var i = 0;
             while (true)
             {
-                var client = new HttpClient();
-                var response =
-                    await client.GetAsync(
-                        $"https://query1.finance.yahoo.com/v10/finance/quoteSummary/{symbols[i++ % symbols.Length]}?modules=price");
-                response.EnsureSuccessStatusCode();
-                var responseBody = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<Quote>(responseBody);
-                Console.WriteLine(
-                    $"{result.quoteSummary.result.First().price.symbol} {result.quoteSummary.result.First().price.regularMarketPrice.raw} {result.quoteSummary.result.First().price.regularMarketChange.raw}");
-
-                _quotes[result.quoteSummary.result.First().price.symbol] = new QuoteSummary
+                try
                 {
-                    Price = result.quoteSummary.result.First().price.regularMarketPrice.raw,
-                    Change = result.quoteSummary.result.First().price.regularMarketChange.raw
-                };
+                    var client = new HttpClient();
+                    var response =
+                        await client.GetAsync(
+                            $"https://query1.finance.yahoo.com/v10/finance/quoteSummary/{symbols[i++ % symbols.Length]}?modules=price");
+                    response.EnsureSuccessStatusCode();
 
-                if (i != 0 && i % symbols.Length == 0)
+                    var responseBody = await response.Content.ReadAsStringAsync();
+
+                    var result = JsonConvert.DeserializeObject<Quote>(responseBody);
+
+                    Console.WriteLine(
+                        $"DEBUG {result.quoteSummary.result.First().price.symbol} {result.quoteSummary.result.First().price.regularMarketPrice.raw} ({result.quoteSummary.result.First().price.regularMarketChange.raw})");
+
+                    _quotes[result.quoteSummary.result.First().price.symbol] = new QuoteSummary
+                    {
+                        Price = result.quoteSummary.result.First().price.regularMarketPrice.raw,
+                        Change = result.quoteSummary.result.First().price.regularMarketChange.raw
+                    };
+
+                    if (i != 0 && i % symbols.Length == 0)
+                    {
+                        Console.WriteLine("DEBUG Waiting for next batch of quotes");
+                        Thread.Sleep(60000);
+                    }
+                }
+                catch (HttpRequestException e)
                 {
-                    Console.WriteLine("Waiting for next batch of quotes");
-                    Thread.Sleep(60000);
+                    // TODO Handle exception
                 }
             }
         }
 
         private static async void GetHeadlines()
         {
-            Console.WriteLine("Getting headlines");
+            Console.WriteLine("INFO  Getting headlines");
 
             while (true)
             {
-                var client = new HttpClient();
-                var response =
-                    await client.GetAsync(
-                        $"https://newsdata.io/api/1/news?apikey={Environment.GetEnvironmentVariable("NEWSDATA_API_KEY")}&language=en&country=ca&q=headlines");
-
-                response.EnsureSuccessStatusCode();
-                var responseBody = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<Headlines>(responseBody);
-
-                foreach (var title in result.results.Select(r => r.title))
+                try
                 {
-                    Console.WriteLine(title);
+                    var client = new HttpClient();
+                    var response =
+                        await client.GetAsync(
+                            $"https://newsdata.io/api/1/news?apikey={Environment.GetEnvironmentVariable("NEWSDATA_API_KEY")}&language=en&country=ca&q=headlines");
 
-                    if (!_headlines.Contains(title))
+                    response.EnsureSuccessStatusCode();
+                    var responseBody = await response.Content.ReadAsStringAsync();
+                
+                    var result = JsonConvert.DeserializeObject<Headlines>(responseBody);
+
+                    foreach (var title in result.results.Select(r => r.title))
                     {
-                        _headlines.Enqueue(title);
+                        Console.WriteLine($"DEBUG {title}");
+
+                        if (!_headlines.Contains(title))
+                        {
+                            _headlines.Enqueue(title);
+                        }
                     }
+
+                    Console.WriteLine($"DEBUG {_headlines.Count} headlines in queue");
+                    Thread.Sleep(1800000);
                 }
-
-                Console.WriteLine($"{_headlines.Count} headlines in queue");
-
-                Console.WriteLine("Waiting for next news update");
-                Thread.Sleep(30000);
-                //Thread.Sleep(1800000);
+                catch (HttpRequestException e)
+                { 
+                }
             }
         }
 
@@ -146,7 +160,7 @@ namespace ScrollingText
             var q_pos = _canvas.Width;
             var h_pos = _canvas.Width;
 
-            Console.WriteLine("Scrolling text");
+            Console.WriteLine("INFO  Starting scrolling ticker");
 
             while (true)
             {
@@ -183,12 +197,12 @@ namespace ScrollingText
                 h_pos--;
                 if (q_pos + quotesLength < 0)
                 {
-                    Console.WriteLine("### QUOTES WRAPPING TEXT");
+                    Console.WriteLine("DEBUG Re-scrolling quotes");
                     q_pos = _canvas.Width;
                 }
                 if (h_pos + headlinesLength < 0)
                 {
-                    Console.WriteLine($"### HEADLINES WRAPPING TEXT: {_headlines.Count}");
+                    Console.WriteLine("DEBUG Re-scrolling headlines");
                     h_pos = _canvas.Width;
                 }
 
@@ -199,9 +213,9 @@ namespace ScrollingText
 
         private static void OnProcessExit(object sender, EventArgs e)
         {
-            Console.WriteLine("Interrupt: rpi-ticker shutting down");
+            Console.WriteLine("INFO  Interrupted: rpi-ticker shutting down");
             _canvas.Clear();
-            Console.WriteLine("Good-bye");
+            Console.WriteLine("INFO  Good-bye");
         }
     }
 }
