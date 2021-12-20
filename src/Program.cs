@@ -5,6 +5,12 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Abstractions;
+using Microsoft.Extensions.Configuration.FileExtensions;
+using Microsoft.Extensions.Configuration.EnvironmentVariables;
+using Microsoft.Extensions.Configuration.Json;
+using System.Configuration.ConfigurationManager;
 using Newtonsoft.Json;
 using rpi_rgb_led_matrix_sharp;
 
@@ -28,6 +34,14 @@ namespace EricBach.RpiTicker
             Console.CancelKeyPress += OnProcessExit;
 
             Console.WriteLine("INFO  Loading configuration");
+
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", true)
+                .AddEnvironmentVariables()
+                .Build();
+
+            var symbols = System.Configuration.ConfigurationManager.AppSettings["symbols"];
 
             // Load environment variables
             var root = Directory.GetCurrentDirectory();

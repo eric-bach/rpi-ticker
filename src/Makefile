@@ -1,6 +1,12 @@
 ﻿CSHARP_LIB=RGBLedMatrix.dll
 CSHARP_HTTP_LIB=System.Net.Http.dll
 CSHARP_JSON_LIB=Newtonsoft.Json.dll
+CSHARP_CONFIG1_LIB=Microsoft.Extensions.Configuration.dll
+CSHARP_CONFIG2_LIB=Microsoft.Extensions.Configuration.Abstractions.dll
+CSHARP_CONFIG3_LIB=Microsoft.Extensions.Configuration.EnvironmentVariables.dll
+CSHARP_CONFIG4_LIB=Microsoft.Extensions.Configuration.FileExtensions.dll
+CSHARP_CONFIG5_LIB=Microsoft.Extensions.Configuration.Json.dll
+CSHARP_CONFIG6_LIB=System.Configuration.ConfigurationManager.dll
 CSHARP_COMPILER=mcs
 CSHARP_LIBDIR=../bindings
 CSHARP_LIBRARY=$(CSHARP_LIBDIR)/$(CSHARP_LIB)
@@ -13,13 +19,13 @@ all: $(CSHARP_LIB)
 	cp $(RGB_LIBRARY) $(RGB_LIBRARY_NAME).so
 	cp $(CSHARP_LIBDIR)/$(CSHARP_JSON_LIB) $(CSHARP_JSON_LIB)
 	cp $(CSHARP_LIBRARY) $(CSHARP_LIB)
-	$(CSHARP_COMPILER) -r:$(CSHARP_LIB) -r:$(CSHARP_HTTP_LIB) -r:$(CSHARP_JSON_LIB) -out:rpi-ticker.exe ./Program.cs ./QuoteSummary.cs ./DotEnv.cs
+	$(CSHARP_COMPILER) -r:$(CSHARP_LIB) -r:$(CSHARP_HTTP_LIB) -r:$(CSHARP_JSON_LIB) -r:$(CSHARP_CONFIG1_LIB) -r:$(CSHARP_CONFIG2_LIB) -r:$(CSHARP_CONFIG3_LIB) -r:$(CSHARP_CONFIG4_LIB) -r:$(CSHARP_CONFIG5_LIB) -r:$(CSHARP_CONFIG6_LIB) -out:rpi-ticker.exe ./Program.cs ./QuoteSummary.cs ./DotEnv.cs
 
 rpi-ticker.exe: $(CSHARP_LIB)
 	cp $(RGB_LIBRARY) $(RGB_LIBRARY_NAME).so
 	cp $(CSHARP_LIBDIR)/$(CSHARP_JSON_LIB) $(CSHARP_JSON_LIB)
 	cp $(CSHARP_LIBRARY) $(CSHARP_LIB)
-	$(CSHARP_COMPILER) -r:$(CSHARP_LIB) -r:$(CSHARP_HTTP_LIB) -r:$(CSHARP_JSON_LIB) -out:rpi-ticker.exe ./Program.cs ./QuoteSummary.cs ./DotEnv.cs
+	$(CSHARP_COMPILER) -r:$(CSHARP_LIB) -r:$(CSHARP_HTTP_LIB) -r:$(CSHARP_JSON_LIB) -r:$(CSHARP_CONFIG1_LIB) -r:$(CSHARP_CONFIG2_LIB) -r:$(CSHARP_CONFIG3_LIB) -r:$(CSHARP_CONFIG4_LIB) -r:$(CSHARP_CONFIG5_LIB) -r:$(CSHARP_CONFIG6_LIB) -out:rpi-ticker.exe ./Program.cs ./QuoteSummary.cs ./DotEnv.cs
 
 $(CSHARP_LIB) :
 	$(MAKE) -C $(CSHARP_LIBDIR)

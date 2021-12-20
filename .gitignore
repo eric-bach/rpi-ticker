@@ -395,6 +395,7 @@ FodyWeavers.xsd
 
 # Compiled files
 *.dll
+!/bindings/*dll
 *.exe
 *.o
 *.so
