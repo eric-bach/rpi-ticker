@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using rpi_rgb_led_matrix_sharp;
 
-namespace ScrollingText
+namespace EricBach.RpiTicker
 {
     public class QuoteSummary
     {
@@ -132,7 +132,7 @@ namespace ScrollingText
 
                     response.EnsureSuccessStatusCode();
                     var responseBody = await response.Content.ReadAsStringAsync();
-                
+
                     var result = JsonConvert.DeserializeObject<Headlines>(responseBody);
 
                     foreach (var title in result.results.Select(r => r.title))
@@ -149,7 +149,7 @@ namespace ScrollingText
                     Thread.Sleep(1800000);
                 }
                 catch (HttpRequestException e)
-                { 
+                {
                 }
             }
         }

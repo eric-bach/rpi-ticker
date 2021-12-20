@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 // ReSharper disable InconsistentNaming
-namespace ScrollingText
+namespace EricBach.RpiTicker
 {
     public class Quote
     {

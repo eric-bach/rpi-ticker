@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace ScrollingText
+namespace EricBach.RpiTicker
 {
     public static class DotEnv
     {
