@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -29,15 +28,11 @@ namespace EricBach.RpiTicker
             Console.CancelKeyPress += OnProcessExit;
 
             Console.WriteLine("INFO  Loading configuration");
-            
+
             // Load environment variables
             var root = Directory.GetCurrentDirectory();
             var dotenv = Path.Combine(root, ".env");
             DotEnv.Load(dotenv);
-
-            Console.WriteLine("INFO  Loading symbols");
-
-            var symbols = File.ReadAllLines("symbols.txt").ToList();
 
             Console.WriteLine("INFO  Initializing rpi-ticker");
 
@@ -55,9 +50,9 @@ namespace EricBach.RpiTicker
             Console.WriteLine("INFO  Starting rpi-ticker");
 
             Parallel.Invoke(
-                () => { GetQuotes(); }
-                //() => { GetHeadlines(); }
-                //() => { RunTicker(matrix); }
+                () => { GetQuotes(); },
+                () => { GetHeadlines(); },
+                () => { RunTicker(matrix); }
             );
         }
 
@@ -83,13 +78,11 @@ namespace EricBach.RpiTicker
                 "ZRE.TO",
             };
 
-            Console.WriteLine($"INFO  Getting {symbols.Length} quotes");
+            Console.WriteLine("INFO  Getting quotes");
 
             var i = 0;
             while (true)
             {
-                Console.WriteLine($"DEBUG Getting symbol {symbols[i]}");
-
                 try
                 {
                     var client = new HttpClient();
@@ -114,13 +107,12 @@ namespace EricBach.RpiTicker
                     if (i != 0 && i % symbols.Length == 0)
                     {
                         Console.WriteLine("DEBUG Waiting for next batch of quotes");
-                        Thread.Sleep(30000);
+                        Thread.Sleep(60000);
                     }
                 }
                 catch (HttpRequestException e)
                 {
                     // TODO Handle exception
-                    Console.WriteLine(e.Message);
                 }
             }
         }
@@ -158,7 +150,6 @@ namespace EricBach.RpiTicker
                 }
                 catch (HttpRequestException e)
                 {
-                    Console.WriteLine(e.Message);
                 }
             }
         }
