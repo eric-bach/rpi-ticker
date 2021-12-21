@@ -9,31 +9,31 @@
 
   <ItemGroup>
     <Reference Include="Microsoft.Extensions.Configuration">
-      <HintPath>..\bindings\Microsoft.Extensions.Configuration.dll</HintPath>
+      <HintPath>lib\Microsoft.Extensions.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.Configuration.Abstractions">
-      <HintPath>..\bindings\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+      <HintPath>lib\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.Configuration.EnvironmentVariables">
-      <HintPath>..\bindings\Microsoft.Extensions.Configuration.EnvironmentVariables.dll</HintPath>
+      <HintPath>lib\Microsoft.Extensions.Configuration.EnvironmentVariables.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.Configuration.FileExtensions">
-      <HintPath>..\bindings\Microsoft.Extensions.Configuration.FileExtensions.dll</HintPath>
+      <HintPath>lib\Microsoft.Extensions.Configuration.FileExtensions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.Configuration.Json">
-      <HintPath>..\bindings\Microsoft.Extensions.Configuration.Json.dll</HintPath>
+      <HintPath>lib\Microsoft.Extensions.Configuration.Json.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\bindings\Newtonsoft.Json.dll</HintPath>
+      <HintPath>lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="RGBLedMatrix">
       <HintPath>..\bindings\RGBLedMatrix.dll</HintPath>
     </Reference>
     <Reference Include="System.Configuration.ConfigurationManager">
-      <HintPath>..\bindings\System.Configuration.ConfigurationManager.dll</HintPath>
+      <HintPath>lib\System.Configuration.ConfigurationManager.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http">
-      <HintPath>..\bindings\System.Net.Http.dll</HintPath>
+      <HintPath>lib\System.Net.Http.dll</HintPath>
     </Reference>    
   </ItemGroup>
 
