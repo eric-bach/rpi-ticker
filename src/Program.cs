@@ -37,31 +37,27 @@ namespace EricBach.RpiTicker
             Console.WriteLine("INFO  Loading symbols");
 
             var symbols = File.ReadAllLines("symbols.txt").ToArray();
-            foreach (var s in symbols)
+
+            Console.WriteLine("INFO  Initializing rpi-ticker");
+
+            var matrix = new RGBLedMatrix(new RGBLedMatrixOptions
             {
-                Console.WriteLine(s);
-            }
+                Rows = 32,
+                Cols = 64,
+                ChainLength = 2,
+                Brightness = 65,
+                // ReSharper disable once StringLiteralTypo
+                HardwareMapping = "adafruit-hat"
+            });
+            _canvas = matrix.CreateOffscreenCanvas();
 
-            //Console.WriteLine("INFO  Initializing rpi-ticker");
+            Console.WriteLine("INFO  Starting rpi-ticker");
 
-            //var matrix = new RGBLedMatrix(new RGBLedMatrixOptions
-            //{
-            //    Rows = 32,
-            //    Cols = 64,
-            //    ChainLength = 2,
-            //    Brightness = 65,
-            //    // ReSharper disable once StringLiteralTypo
-            //    HardwareMapping = "adafruit-hat"
-            //});
-            //_canvas = matrix.CreateOffscreenCanvas();
-
-            //Console.WriteLine("INFO  Starting rpi-ticker");
-
-            //Parallel.Invoke(
-            //    () => { GetQuotes(symbols); },
-            //    () => { GetHeadlines(); },
-            //    () => { RunTicker(matrix); }
-            //);
+            Parallel.Invoke(
+                () => { GetQuotes(symbols); },
+                () => { GetHeadlines(); },
+                () => { RunTicker(matrix); }
+            );
         }
 
 
@@ -93,6 +89,8 @@ namespace EricBach.RpiTicker
             {
                 try
                 {
+                    Console.WriteLine($"https://query1.finance.yahoo.com/v10/finance/quoteSummary/{symbols[i++ % symbols.Length]}?modules=price");
+
                     var client = new HttpClient();
                     var response =
                         await client.GetAsync(
