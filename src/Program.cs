@@ -146,7 +146,7 @@ namespace EricBach.RpiTicker
                     }
 
                     Console.WriteLine($"DEBUG {_headlines.Count} headlines in queue");
-                    Thread.Sleep(1800000);
+                    Thread.Sleep(3600000);
                 }
                 catch (HttpRequestException e)
                 {
