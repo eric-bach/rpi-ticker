@@ -95,9 +95,9 @@ namespace EricBach.RpiTicker
                         Thread.Sleep(60000);
                     }
                 }
-                catch (HttpRequestException e)
+                catch (Exception e)
                 {
-                    // TODO Handle exception
+                    Console.Write($"ERROR {e.Message}");
                 }
             }
         }
@@ -133,8 +133,9 @@ namespace EricBach.RpiTicker
                     Console.WriteLine($"DEBUG {_headlines.Count} headlines in queue");
                     Thread.Sleep(3600000);
                 }
-                catch (HttpRequestException e)
+                catch (Exception e)
                 {
+                    Console.Write($"ERROR {e.Message}");
                 }
             }
         }
