@@ -53,9 +53,9 @@ namespace EricBach.RpiTicker
 
             Console.WriteLine("INFO  Starting rpi-ticker");
 
-            var quoteTask = Task.Run(() => { GetQuotes(symbols); });
-            var headlinesTask = Task.Run(() => { GetHeadlines(); });
-            Task.WaitAll(quoteTask, headlinesTask);
+            var quotesTask = Task.Run(() => { GetQuotes(symbols); });
+            var headlinesTask = Task.Run(GetHeadlines);
+            Task.WaitAll(quotesTask, headlinesTask);
 
             RunTicker(matrix);
         }
