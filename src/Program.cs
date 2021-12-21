@@ -55,28 +55,47 @@ namespace EricBach.RpiTicker
             Console.WriteLine("INFO  Starting rpi-ticker");
 
             Parallel.Invoke(
-                () => { GetQuotes(symbols); }
+                () => { GetQuotes(); }
                 //() => { GetHeadlines(); }
                 //() => { RunTicker(matrix); }
             );
         }
 
 
-        private static async void GetQuotes(List<string> symbols)
+        private static async void GetQuotes()
         {
-            Console.WriteLine($"INFO  Getting {symbols.Count} quotes");
+            var symbols = new[]
+            {
+                "AC.TO",
+                "AMZN",
+                "BMO.TO",
+                "DDOG",
+                "LYFT",
+                "MSFT",
+                "NIO",
+                "PTON",
+                "SNOW",
+                "TD.TO",
+                "TSLA",
+                "VGRO.TO",
+                "VXC.TO",
+                "ZAG.TO",
+                "ZRE.TO",
+            };
+
+            Console.WriteLine($"INFO  Getting {symbols.Length} quotes");
 
             var i = 0;
             while (true)
             {
-                Console.WriteLine($"Getting symbol {symbols[i]}");
+                Console.WriteLine($"DEBUG Getting symbol {symbols[i]}");
 
                 try
                 {
                     var client = new HttpClient();
                     var response =
                         await client.GetAsync(
-                            $"https://query1.finance.yahoo.com/v10/finance/quoteSummary/{symbols[i++ % symbols.Count]}?modules=price");
+                            $"https://query1.finance.yahoo.com/v10/finance/quoteSummary/{symbols[i++ % symbols.Length]}?modules=price");
                     response.EnsureSuccessStatusCode();
 
                     var responseBody = await response.Content.ReadAsStringAsync();
@@ -92,7 +111,7 @@ namespace EricBach.RpiTicker
                         Change = result.quoteSummary.result.First().price.regularMarketChange.raw
                     };
 
-                    if (i != 0 && i % symbols.Count == 0)
+                    if (i != 0 && i % symbols.Length == 0)
                     {
                         Console.WriteLine("DEBUG Waiting for next batch of quotes");
                         Thread.Sleep(30000);
