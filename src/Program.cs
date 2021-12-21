@@ -58,7 +58,7 @@ namespace EricBach.RpiTicker
                 () => { GetHeadlines(); }
             );
 
-            Task.Run(() => { RunTicker(matrix); });
+            RunTicker(matrix);
         }
 
 
