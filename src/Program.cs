@@ -64,7 +64,7 @@ namespace EricBach.RpiTicker
 
         private static async void GetQuotes(List<string> symbols)
         {
-            Console.WriteLine("INFO  Getting quotes");
+            Console.WriteLine($"INFO  Getting {symbols.Count} quotes");
 
             var i = 0;
             while (true)
