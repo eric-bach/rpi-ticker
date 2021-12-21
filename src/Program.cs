@@ -55,33 +55,15 @@ namespace EricBach.RpiTicker
 
             Parallel.Invoke(
                 () => { GetQuotes(symbols); },
-                () => { GetHeadlines(); },
-                () => { RunTicker(matrix); }
+                () => { GetHeadlines(); }
             );
+
+            Task.Run(() => { RunTicker(matrix); });
         }
 
 
         private static async void GetQuotes(string[] symbols)
         {
-            //var symbols = new[]
-            //{
-            //    "AC.TO",
-            //    "AMZN",
-            //    "BMO.TO",
-            //    "DDOG",
-            //    "LYFT",
-            //    "MSFT",
-            //    "NIO",
-            //    "PTON",
-            //    "SNOW",
-            //    "TD.TO",
-            //    "TSLA",
-            //    "VGRO.TO",
-            //    "VXC.TO",
-            //    "ZAG.TO",
-            //    "ZRE.TO",
-            //};
-
             Console.WriteLine("INFO  Getting quotes");
 
             var i = 0;
@@ -89,8 +71,6 @@ namespace EricBach.RpiTicker
             {
                 try
                 {
-                    Console.WriteLine($"https://query1.finance.yahoo.com/v10/finance/quoteSummary/{symbols[i++ % symbols.Length]}?modules=price");
-
                     var client = new HttpClient();
                     var response =
                         await client.GetAsync(
