@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -28,11 +29,15 @@ namespace EricBach.RpiTicker
             Console.CancelKeyPress += OnProcessExit;
 
             Console.WriteLine("INFO  Loading configuration");
-
+            
             // Load environment variables
             var root = Directory.GetCurrentDirectory();
             var dotenv = Path.Combine(root, ".env");
             DotEnv.Load(dotenv);
+
+            Console.WriteLine("INFO  Loading symbols");
+
+            var symbols = File.ReadAllLines("symbols.txt").ToList();
 
             Console.WriteLine("INFO  Initializing rpi-ticker");
 
@@ -50,34 +55,15 @@ namespace EricBach.RpiTicker
             Console.WriteLine("INFO  Starting rpi-ticker");
 
             Parallel.Invoke(
-                () => { GetQuotes(); },
+                () => { GetQuotes(symbols); },
                 () => { GetHeadlines(); },
                 () => { RunTicker(matrix); }
             );
         }
 
 
-        private static async void GetQuotes()
+        private static async void GetQuotes(List<string> symbols)
         {
-            var symbols = new[]
-            {
-                "AC.TO",
-                "AMZN",
-                "BMO.TO",
-                "DDOG",
-                "LYFT",
-                "MSFT",
-                "NIO",
-                "PTON",
-                "SNOW",
-                "TD.TO",
-                "TSLA",
-                "VGRO.TO",
-                "VXC.TO",
-                "ZAG.TO",
-                "ZRE.TO",
-            };
-
             Console.WriteLine("INFO  Getting quotes");
 
             var i = 0;
@@ -88,7 +74,7 @@ namespace EricBach.RpiTicker
                     var client = new HttpClient();
                     var response =
                         await client.GetAsync(
-                            $"https://query1.finance.yahoo.com/v10/finance/quoteSummary/{symbols[i++ % symbols.Length]}?modules=price");
+                            $"https://query1.finance.yahoo.com/v10/finance/quoteSummary/{symbols[i++ % symbols.Count]}?modules=price");
                     response.EnsureSuccessStatusCode();
 
                     var responseBody = await response.Content.ReadAsStringAsync();
@@ -104,10 +90,10 @@ namespace EricBach.RpiTicker
                         Change = result.quoteSummary.result.First().price.regularMarketChange.raw
                     };
 
-                    if (i != 0 && i % symbols.Length == 0)
+                    if (i != 0 && i % symbols.Count == 0)
                     {
                         Console.WriteLine("DEBUG Waiting for next batch of quotes");
-                        Thread.Sleep(60000);
+                        Thread.Sleep(30000);
                     }
                 }
                 catch (HttpRequestException e)
