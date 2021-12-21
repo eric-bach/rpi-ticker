@@ -101,6 +101,7 @@ namespace EricBach.RpiTicker
                 catch (HttpRequestException e)
                 {
                     // TODO Handle exception
+                    Console.WriteLine(e.Message);
                 }
             }
         }
@@ -138,6 +139,7 @@ namespace EricBach.RpiTicker
                 }
                 catch (HttpRequestException e)
                 {
+                    Console.WriteLine(e.Message);
                 }
             }
         }
