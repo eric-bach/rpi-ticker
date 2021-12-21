@@ -34,6 +34,10 @@ namespace EricBach.RpiTicker
             var dotenv = Path.Combine(root, ".env");
             DotEnv.Load(dotenv);
 
+            Console.WriteLine("INFO  Loading symbols");
+
+            var symbols = File.ReadAllLines("symbols.txt").ToArray();
+
             Console.WriteLine("INFO  Initializing rpi-ticker");
 
             var matrix = new RGBLedMatrix(new RGBLedMatrixOptions
@@ -50,33 +54,33 @@ namespace EricBach.RpiTicker
             Console.WriteLine("INFO  Starting rpi-ticker");
 
             Parallel.Invoke(
-                () => { GetQuotes(); },
+                () => { GetQuotes(symbols); },
                 () => { GetHeadlines(); },
                 () => { RunTicker(matrix); }
             );
         }
 
 
-        private static async void GetQuotes()
+        private static async void GetQuotes(string[] symbols)
         {
-            var symbols = new[]
-            {
-                "AC.TO",
-                "AMZN",
-                "BMO.TO",
-                "DDOG",
-                "LYFT",
-                "MSFT",
-                "NIO",
-                "PTON",
-                "SNOW",
-                "TD.TO",
-                "TSLA",
-                "VGRO.TO",
-                "VXC.TO",
-                "ZAG.TO",
-                "ZRE.TO",
-            };
+            //var symbols = new[]
+            //{
+            //    "AC.TO",
+            //    "AMZN",
+            //    "BMO.TO",
+            //    "DDOG",
+            //    "LYFT",
+            //    "MSFT",
+            //    "NIO",
+            //    "PTON",
+            //    "SNOW",
+            //    "TD.TO",
+            //    "TSLA",
+            //    "VGRO.TO",
+            //    "VXC.TO",
+            //    "ZAG.TO",
+            //    "ZRE.TO",
+            //};
 
             Console.WriteLine("INFO  Getting quotes");
 
