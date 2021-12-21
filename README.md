@@ -31,7 +31,9 @@ If you would like to get started with some simple examples before setting up the
 
 ## Run the text scroller project
 
-1. Run the rpi-ticker application in the `src` folder using mono
+1. Edit the `src/symbols.txt` file with new line separated symbols to retrieve quotes for
+
+2. Run the rpi-ticker application in the `src` folder using mono
 
    ```shell
    sudo mono rpi-ticker.exe
