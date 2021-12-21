@@ -37,27 +37,31 @@ namespace EricBach.RpiTicker
             Console.WriteLine("INFO  Loading symbols");
 
             var symbols = File.ReadAllLines("symbols.txt").ToArray();
-
-            Console.WriteLine("INFO  Initializing rpi-ticker");
-
-            var matrix = new RGBLedMatrix(new RGBLedMatrixOptions
+            foreach (var s in symbols)
             {
-                Rows = 32,
-                Cols = 64,
-                ChainLength = 2,
-                Brightness = 65,
-                // ReSharper disable once StringLiteralTypo
-                HardwareMapping = "adafruit-hat"
-            });
-            _canvas = matrix.CreateOffscreenCanvas();
+                Console.WriteLine(s);
+            }
 
-            Console.WriteLine("INFO  Starting rpi-ticker");
+            //Console.WriteLine("INFO  Initializing rpi-ticker");
 
-            Parallel.Invoke(
-                () => { GetQuotes(symbols); },
-                () => { GetHeadlines(); },
-                () => { RunTicker(matrix); }
-            );
+            //var matrix = new RGBLedMatrix(new RGBLedMatrixOptions
+            //{
+            //    Rows = 32,
+            //    Cols = 64,
+            //    ChainLength = 2,
+            //    Brightness = 65,
+            //    // ReSharper disable once StringLiteralTypo
+            //    HardwareMapping = "adafruit-hat"
+            //});
+            //_canvas = matrix.CreateOffscreenCanvas();
+
+            //Console.WriteLine("INFO  Starting rpi-ticker");
+
+            //Parallel.Invoke(
+            //    () => { GetQuotes(symbols); },
+            //    () => { GetHeadlines(); },
+            //    () => { RunTicker(matrix); }
+            //);
         }
 
 
