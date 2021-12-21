@@ -56,8 +56,8 @@ namespace EricBach.RpiTicker
 
             Parallel.Invoke(
                 () => { GetQuotes(symbols); },
-                () => { GetHeadlines(); },
-                () => { RunTicker(matrix); }
+                () => { GetHeadlines(); }
+                //() => { RunTicker(matrix); }
             );
         }
 
@@ -69,6 +69,8 @@ namespace EricBach.RpiTicker
             var i = 0;
             while (true)
             {
+                Console.WriteLine($"Getting symbol {symbols[i]}");
+
                 try
                 {
                     var client = new HttpClient();
