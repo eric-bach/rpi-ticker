@@ -14,14 +14,14 @@ all: $(CSHARP_LIB)
 	cp $(CSHARP_LIBRARY) $(CSHARP_LIB)
 	cp $(CSHARP_PROJECT_LIBDIR)/$(CSHARP_HTTP_LIB) $(CSHARP_HTTP_LIB)
 	cp $(CSHARP_PROJECT_LIBDIR)/$(CSHARP_JSON_LIB) $(CSHARP_JSON_LIB)
-	$(CSHARP_COMPILER) -r:$(CSHARP_LIB) -r:$(CSHARP_HTTP_LIB) -r:$(CSHARP_JSON_LIB) -out:rpi-ticker.exe ./Program.cs ./Utils/DotEnv.cs ./Controllers/MatrixController.cs ./Controllers/NewsData.cs ./Controllers/YahooFinance.cs ./ViewModels/NewsdataHeadlines.cs ./ViewModels/Quotes.cs ./ViewModels/YahooFinanceQuote.cs
+	$(CSHARP_COMPILER) -r:$(CSHARP_LIB) -r:$(CSHARP_HTTP_LIB) -r:$(CSHARP_JSON_LIB) -out:rpi-ticker.exe ./Program.cs ./Utils/DotEnv.cs ./Controllers/MatrixController.cs ./Controllers/NewsData.cs ./Controllers/YahooFinance.cs ./ViewModels/NewsdataHeadlines.cs ./ViewModels/QuotesViewModel.cs ./ViewModels/YahooFinanceQuote.cs
 
 rpi-ticker.exe: $(CSHARP_LIB)
 	cp $(RGB_LIBRARY) $(RGB_LIBRARY_NAME).so
 	cp $(CSHARP_LIBRARY) $(CSHARP_LIB)
 	cp $(CSHARP_PROJECT_LIBDIR)/$(CSHARP_HTTP_LIB) $(CSHARP_HTTP_LIB)
 	cp $(CSHARP_PROJECT_LIBDIR)/$(CSHARP_JSON_LIB) $(CSHARP_JSON_LIB)
-	$(CSHARP_COMPILER) -r:$(CSHARP_LIB) -r:$(CSHARP_HTTP_LIB) -r:$(CSHARP_JSON_LIB) -out:rpi-ticker.exe ./Program.cs ./Utils/DotEnv.cs ./Controllers/MatrixController.cs ./Controllers/NewsData.cs ./Controllers/YahooFinance.cs ./ViewModels/NewsdataHeadlines.cs ./ViewModels/Quotes.cs ./ViewModels/YahooFinanceQuote.cs	
+	$(CSHARP_COMPILER) -r:$(CSHARP_LIB) -r:$(CSHARP_HTTP_LIB) -r:$(CSHARP_JSON_LIB) -out:rpi-ticker.exe ./Program.cs ./Utils/DotEnv.cs ./Controllers/MatrixController.cs ./Controllers/NewsData.cs ./Controllers/YahooFinance.cs ./ViewModels/NewsdataHeadlines.cs ./ViewModels/QuotesViewModel.cs ./ViewModels/YahooFinanceQuote.cs	
 
 $(CSHARP_LIB) :
 	$(MAKE) -C $(CSHARP_LIBDIR)
