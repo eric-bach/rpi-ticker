@@ -14,7 +14,7 @@ namespace EricBach.RpiTicker.Controllers
         public static async void GetQuotesAsync(ConcurrentDictionary<string, QuoteViewModel> quotes)
         {
             Console.WriteLine("INFO  Loading symbols");
-            var symbols = (await File.ReadAllLinesAsync("symbols.txt")).ToArray();
+            var symbols = File.ReadAllLines("symbols.txt").ToArray();
 
             Console.WriteLine("INFO  Getting quotes");
             
