@@ -1,0 +1,16 @@
+1. Image DietPi to SD Card
+2. Plug in Ethernet and HDMI
+3. Power on Raspberry Pi
+4. Logon DietPi using root
+	a. Configure WiFi with dietpi-config
+	b. Install OpenSSH and Git with dietpi-launcher
+5. Logon DietPi using dietpi
+6. Install DevTools
+	sudo apt-get update && sudo apt-get install make g++ mono-complete
+7. Clone repo
+	git clone https://github.com/eric-bach/rpi-ticker.git
+8. Build
+	make && make build-csharp
+9. Test rpi-ticker
+	cd src/
+	sudo mono rpi-ticker.exe
