@@ -6,9 +6,41 @@ The `src` folder contains the application using the C# bindings from [hzeller's 
 
 ## Getting started
 
+### Setting up a RPi with DietPi OS
+
+Skip this step if the RPi is already set or is running with an OS and dependencies needed for this project
+
+1. Download DietPi 32bit
+
+2. Install DietPi using Rufus - https://dietpi.com/docs/install/
+
+3. Boot RPi
+
+4. Run dietpi-config
+   Enable WiFi
+   Install git
+   Change Dropbear SSH to OpenSSH
+
+5. Install packages
+   sudo apt-get install make
+   sudo apt-get install build-essential
+   sudo apt-get install mono-complete
+
+6. Clone this repo
+   make
+   make build-csharp
+
+7. Edit config
+   Edit src/symbols.txt
+   Get APIKey from NewData.IO and update src/.env
+
+8. Run sudo mono rpi-ticker.exe
+
+### Running this code
+
 If you would like to get started with some simple examples before setting up the project, there are examples in the `examples` folder that you can find [here](examples/README.md) with instructions on how to run each of them. Otherwise the following steps outliens how to setup the `rpi-ticker`.
 
-## Build the project
+#### Build the project
 
 1. In the root directory build all the necessary libraries based on [hzeller/rpi=rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix)
 
@@ -29,7 +61,7 @@ If you would like to get started with some simple examples before setting up the
    make build-csharp
    ```
 
-## Run the text scroller project
+##### Run the text scroller project
 
 1. Edit the `src/symbols.txt` file with new line separated symbols to retrieve quotes for
 
@@ -39,7 +71,7 @@ If you would like to get started with some simple examples before setting up the
    sudo mono rpi-ticker.exe
    ```
 
-### Notes
+#### Notes
 
 C# applications look for libraries in the working directory of the application. To use this library for your own projects you will need to ensure you have RGBLedMatrix.dll and librgbmatrix.so in the same folder as your exe.
 
