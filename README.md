@@ -26,15 +26,25 @@ Skip this step if the RPi is already set or is running with an OS and dependenci
    sudo apt-get install build-essential
    sudo apt-get install mono-complete
 
-6. Clone this repo
+6. Install dotnet (scripted install)
+   wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
+   chmod +x ./dotnet-install.sh
+   ./dotnet-install.sh --channel 6.0
+
+   Add to path
+   echo 'export PATH="$PATH:$HOME/.dotnet"' >> ~/.bashrc
+   source ~/.bashrc
+   dotnet --version
+
+7. Clone this repo
    make
    make build-csharp
 
-7. Edit config
+8. Edit config
    Edit src/symbols.txt
    Get APIKey from NewData.IO and update src/.env
 
-8. Run sudo mono rpi-ticker.exe
+9. Run sudo mono rpi-ticker.exe
 
 ### Running this code
 
