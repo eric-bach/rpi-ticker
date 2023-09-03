@@ -26,7 +26,7 @@ namespace EricBach.RpiTicker.Controllers
                     var client = new HttpClient();
                     var response =
                         await client.GetAsync(
-                            $"https://query2.finance.yahoo.com/v10/finance/quoteSummary/{symbols[i++ % symbols.Length]}?crumb=imL6xWbGxDX&modules=price");
+                            $"https://query1.finance.yahoo.com/v10/finance/quoteSummary/{symbols[i++ % symbols.Length]}?crumb=imL6xWbGxDX&modules=price");
                     response.EnsureSuccessStatusCode();
 
                     var responseBody = await response.Content.ReadAsStringAsync();
