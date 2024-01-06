@@ -32,7 +32,7 @@ namespace EricBach.RpiTicker
             //var headlinesTask = Task.Run(() => { NewsData.GetHeadlines(_headlines); });
             //Task.WaitAll(quotesTask, headlinesTask);
 
-            YahooFinanceHtml.GetQuotesAsync(_quotes);
+            YahooFinanceHtml.GetQuotes(_quotes);
             var headlinesTask = Task.Run(() => { NewsData.GetHeadlines(_headlines); });
             Task.WaitAll( headlinesTask);
 
