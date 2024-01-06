@@ -26,11 +26,16 @@ namespace EricBach.RpiTicker.Controllers
                     {
                         var symbol = symbols[i++ % symbols.Length];
 
-                        var html = @"https://finance.yahoo.com/quote/AAPL";
+                        var html = $"https://finance.yahoo.com/quote/{symbol}";
                         var web = new HtmlWeb();
                         var htmlDoc = web.Load(html);
 
+                        Console.WriteLine($"Symbol {symbol}");
+
                         var node = htmlDoc.DocumentNode.SelectSingleNode($"//*[@data-symbol='{symbol}']");
+
+                        Console.WriteLine($"Quote {node.InnerHtml}");
+
                         var node2 = htmlDoc.DocumentNode.SelectSingleNode("//*[@data-field='regularMarketChange']");
                         var node3 = htmlDoc.DocumentNode.SelectSingleNode("//*[@data-field='regularMarketChangePercent']");
 
