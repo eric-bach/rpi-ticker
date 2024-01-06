@@ -29,9 +29,12 @@ namespace EricBach.RpiTicker
             Console.WriteLine("INFO  Starting rpi-ticker");
 
             //var quotesTask = Task.Run(() => { YahooFinanceApi.GetQuotesAsync(_quotes); });
-            var quotesTask = Task.Run(() => { YahooFinanceHtml.GetQuotesAsync(_quotes); });
+            //var headlinesTask = Task.Run(() => { NewsData.GetHeadlines(_headlines); });
+            //Task.WaitAll(quotesTask, headlinesTask);
+
+            YahooFinanceHtml.GetQuotesAsync(_quotes);
             var headlinesTask = Task.Run(() => { NewsData.GetHeadlines(_headlines); });
-            Task.WaitAll(quotesTask, headlinesTask);
+            Task.WaitAll( headlinesTask);
 
             Matrix.RunTicker(_quotes, _headlines);
         }
