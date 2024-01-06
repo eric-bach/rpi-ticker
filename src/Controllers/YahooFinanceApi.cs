@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace EricBach.RpiTicker.Controllers
 {
-    public static class YahooFinance
+    public static class YahooFinanceApi
     {
         public static async void GetQuotesAsync(ConcurrentDictionary<string, QuoteViewModel> quotes)
         {
