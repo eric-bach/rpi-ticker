@@ -11,7 +11,7 @@ namespace EricBach.RpiTicker.Controllers
 {
     public static class YahooFinanceHtml
     {
-        public static async Task GetQuotesAsync(ConcurrentDictionary<string, QuoteViewModel> quotes)
+        public static async void GetQuotesAsync(ConcurrentDictionary<string, QuoteViewModel> quotes)
         {
             await Task.Run(() =>
             {
