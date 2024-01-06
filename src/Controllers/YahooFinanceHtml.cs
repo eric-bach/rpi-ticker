@@ -17,7 +17,7 @@ namespace EricBach.RpiTicker.Controllers
             {
                 Console.WriteLine("INFO  Loading symbols");
                 var symbols = File.ReadAllLines("symbols.txt").ToArray();
-                Console.WriteLine("INFO  Getting quotes");
+                Console.WriteLine($"INFO  Getting quotes {symbols.Length}");
 
                 var i = 0;
                 while (true)
