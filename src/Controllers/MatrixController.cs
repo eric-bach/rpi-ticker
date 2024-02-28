@@ -47,12 +47,9 @@ namespace EricBach.RpiTicker.Controllers
                 {
                     foreach (var q in quotes)
                     {
-                        quotesLength += Canvas.DrawText(font, q_pos + quotesLength, 13, new Color(0, 0, 255),
-                            $" {q.Key} ");
-                        quotesLength += Canvas.DrawText(font, q_pos + quotesLength, 13, new Color(255, 255, 0),
-                            $"{q.Value.Price:0.00} ");
-                        quotesLength += Canvas.DrawText(font, q_pos + quotesLength, 13,
-                            q.Value.Change > 0 ? new Color(0, 255, 0) : new Color(255, 0, 0),
+                        quotesLength += Canvas.DrawText(font, q_pos + quotesLength, 13, new Color(0, 0, 255), $" {q.Key} ");
+                        quotesLength += Canvas.DrawText(font, q_pos + quotesLength, 13, new Color(255, 255, 0), $"{q.Value.Price:0.00} ");
+                        quotesLength += Canvas.DrawText(font, q_pos + quotesLength, 13, q.Value.Change > 0 ? new Color(0, 255, 0) : new Color(255, 0, 0),
                             $"({(q.Value.Change > 0 ? "+" : "")}{q.Value.Change:0.00})");
                     }
                 });

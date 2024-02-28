@@ -1,37 +1,13 @@
-﻿using System.Collections.Generic;
-
-// ReSharper disable InconsistentNaming
+﻿// ReSharper disable InconsistentNaming
 namespace EricBach.RpiTicker.ViewModels
 {
     public class YahooFinanceQuote
     {
-        public QuoteSummary quoteSummary { get; set; }
-
-        public class QuoteSummary
-        {
-            public ICollection<Result> result { get; set; }
-
-            public class Result
-            {
-                public Price price { get; set; }
-
-                public class Price
-                {
-                    public string symbol { get; set; }
-                    public RegularMarketPrice regularMarketPrice { get; set; }
-                    public RegularMarketChange regularMarketChange { get; set; }
-
-                    public class RegularMarketPrice
-                    {
-                        public decimal raw { get; set; }
-                    }
-
-                    public class RegularMarketChange
-                    {
-                        public decimal raw { get; set; }
-                    }
-                }
-            }
-        }
+        public string symbol { get; set; }
+        public decimal currentPrice { get; set; }
+        public decimal change { get; set; }
+        public decimal changePercent { get; set; }
+        public string lastUpdated { get; set; }
+        public long timestamp { get; set; }
     }
 }

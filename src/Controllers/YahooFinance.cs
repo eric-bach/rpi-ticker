@@ -9,44 +9,45 @@ using Newtonsoft.Json;
 
 namespace EricBach.RpiTicker.Controllers
 {
+    /// <summary>
+    /// Calls AWS Lambda Function URL with quotes from Yahoo Finance
+    /// </summary>
     public static class YahooFinance
     {
         public static async void GetQuotesAsync(ConcurrentDictionary<string, QuoteViewModel> quotes)
         {
-            Console.WriteLine("INFO  Loading symbols");
-            var symbols = File.ReadAllLines("symbols.txt").ToArray();
+            //Console.WriteLine("INFO  Loading symbols");
+            //var symbols = File.ReadAllLines("symbols.txt").ToArray();
 
             Console.WriteLine("INFO  Getting quotes");
             
-            var i = 0;
             while (true)
             {
                 try
                 {
                     var client = new HttpClient();
-                    var response =
-                        await client.GetAsync(
-                            $"https://query1.finance.yahoo.com/v10/finance/quoteSummary/{symbols[i++ % symbols.Length]}?crumb=imL6xWbGxDX&modules=price");
+                    client.DefaultRequestHeaders.Add("apikey", "KFX7mmm%LuWYtKnDRiXr");
+                    var response = await client.GetAsync($"https://mzxwah4s37265fs2i2j2ovhehe0tywwa.lambda-url.us-east-1.on.aws");
                     response.EnsureSuccessStatusCode();
 
                     var responseBody = await response.Content.ReadAsStringAsync();
 
-                    var result = JsonConvert.DeserializeObject<YahooFinanceQuote>(responseBody);
+                    var result = JsonConvert.DeserializeObject<YahooFinanceQuote[]>(responseBody);
 
-                    Console.WriteLine(
-                        $"DEBUG {result.quoteSummary.result.First().price.symbol} {result.quoteSummary.result.First().price.regularMarketPrice.raw} ({result.quoteSummary.result.First().price.regularMarketChange.raw})");
+                    Console.WriteLine($"DEBUG Received {result.Length} quotes.");
 
-                    quotes[result.quoteSummary.result.First().price.symbol] = new QuoteViewModel
+                    foreach (var q in result)
                     {
-                        Price = result.quoteSummary.result.First().price.regularMarketPrice.raw,
-                        Change = result.quoteSummary.result.First().price.regularMarketChange.raw
-                    };
-
-                    if (i != 0 && i % symbols.Length == 0)
-                    {
-                        Console.WriteLine("DEBUG Waiting for next batch of quotes");
-                        Thread.Sleep(60000);
+                        Console.WriteLine($"{q.symbol} {q.currentPrice} {q.change}");
+                        quotes[q.symbol] = new QuoteViewModel
+                        {
+                            Price = q.currentPrice,
+                            Change = q.change
+                        };
                     }
+
+                    Console.WriteLine("DEBUG Waiting for next batch of quotes");
+                    Thread.Sleep(60000);
                 }
                 catch (Exception e)
                 {
