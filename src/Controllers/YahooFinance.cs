@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using EricBach.RpiTicker.ViewModels;
@@ -16,20 +14,18 @@ namespace EricBach.RpiTicker.Controllers
     {
         public static async void GetQuotesAsync(ConcurrentDictionary<string, QuoteViewModel> quotes)
         {
-            //Console.WriteLine("INFO  Loading symbols");
-            //var symbols = File.ReadAllLines("symbols.txt").ToArray();
-
             Console.WriteLine("INFO  Getting quotes");
             
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("apikey", Environment.GetEnvironmentVariable("YAHOO_API_KEY"));
+
             while (true)
             {
                 try
                 {
-                    var client = new HttpClient();
-                    client.DefaultRequestHeaders.Add("apikey", "KFX7mmm%LuWYtKnDRiXr");
                     var response = await client.GetAsync($"https://mzxwah4s37265fs2i2j2ovhehe0tywwa.lambda-url.us-east-1.on.aws");
+                    
                     response.EnsureSuccessStatusCode();
-
                     var responseBody = await response.Content.ReadAsStringAsync();
 
                     var result = JsonConvert.DeserializeObject<YahooFinanceQuote[]>(responseBody);
@@ -39,6 +35,7 @@ namespace EricBach.RpiTicker.Controllers
                     foreach (var q in result)
                     {
                         Console.WriteLine($"{q.symbol} {q.currentPrice} {q.change}");
+
                         quotes[q.symbol] = new QuoteViewModel
                         {
                             Price = q.currentPrice,
