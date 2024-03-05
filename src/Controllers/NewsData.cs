@@ -13,20 +13,23 @@ namespace EricBach.RpiTicker.Controllers
         public static async void GetHeadlines(ConcurrentQueue<string> headlines)
         {
             Console.WriteLine("INFO  Getting headlines");
+            
+            var client = new HttpClient();
 
             while (true)
             {
                 try
                 {
-                    var client = new HttpClient();
                     var response =
                         await client.GetAsync(
                             $"https://newsdata.io/api/1/news?apikey={Environment.GetEnvironmentVariable("NEWSDATA_API_KEY")}&language=en&country=ca&q=headlines");
-
+                    
                     response.EnsureSuccessStatusCode();
                     var responseBody = await response.Content.ReadAsStringAsync();
 
                     var result = JsonConvert.DeserializeObject<NewsdataHeadlines>(responseBody);
+
+                    Console.WriteLine($"DEBUG Received {result.results.Count} headlines.");
 
                     foreach (var title in result.results.Select(r => r.title))
                     {
